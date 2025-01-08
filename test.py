@@ -75,7 +75,6 @@ def add_stock():
     try:
         ticker = yf.Ticker(symbol)
         info = ticker.get_info()
-
         if info:
             STOCKS.append(symbol)
             STOCKS.sort()
@@ -88,5 +87,18 @@ def add_stock():
     return jsonify({'success': False, 'message': 'Invalid stock symbol'})
 
 
+@app.route('/delete_stock', methods=['POST'])
+def delete_stock():
+    symbol = request.form.get('symbol', '').strip().lower()
+
+    if symbol in STOCKS:
+        STOCKS.remove(symbol)
+        # Invalidate cache
+        get_all_stock_data.cache_clear()
+        return jsonify({'success': True, 'message': 'Stock removed successfully'})
+
+    return jsonify({'success': False, 'message': 'Stock not found'})
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
