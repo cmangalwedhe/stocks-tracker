@@ -12,7 +12,6 @@
             --secondary-color: #ffffff;
             --border-color: #d2d2d7;
         }
-
         .dark-mode {
             --bg-color: #1d1d1f;
             --text-color: #f5f5f7;
@@ -20,11 +19,6 @@
             --secondary-color: #2c2c2e;
             --border-color: #444444;
         }
-
-        .dark-mode a {
-            color: #4da6ff;
-        }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
             background-color: var(--bg-color);
@@ -36,13 +30,11 @@
             letter-spacing: -0.022em;
             transition: background-color 0.3s, color 0.3s;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 22px;
         }
-
         h1 {
             font-size: 32px;
             line-height: 1.1;
@@ -52,14 +44,12 @@
             text-align: center;
             margin-bottom: 40px;
         }
-
         #addStockForm {
             display: flex;
             justify-content: center;
             margin-bottom: 30px;
             gap: 10px;
         }
-
         #newStockSymbol {
             padding: 12px 16px;
             font-size: 17px;
@@ -69,7 +59,6 @@
             background-color: var(--secondary-color);
             color: var(--text-color);
         }
-
         #addStockButton {
             padding: 12px 24px;
             font-size: 17px;
@@ -80,36 +69,38 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-
         #addStockButton:hover {
             background-color: #0077ed;
         }
-
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .stock-card {
             background-color: var(--secondary-color);
             border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-
-        th, td {
-            padding: 16px 12px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
+        .stock-symbol {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
-
-        th {
-            font-weight: 600;
+        .stock-name {
+            font-size: 16px;
+            color: #86868b;
+            margin-bottom: 15px;
+        }
+        .stock-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .stock-info span:first-child {
             color: #86868b;
         }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
         .delete-btn {
             background-color: #ffffff;
             color: var(--primary-color);
@@ -120,13 +111,12 @@
             transition: all 0.3s;
             font-size: 14px;
             font-weight: 500;
+            margin-top: 15px;
         }
-
         .delete-btn:hover {
             background-color: var(--primary-color);
             color: #ffffff;
         }
-
         #themeToggle {
             position: fixed;
             top: 20px;
@@ -140,23 +130,15 @@
             font-size: 20px;
             transition: background-color 0.3s;
         }
-
         @media (max-width: 768px) {
             .container {
                 padding: 0 10px;
             }
-
-            table {
-                font-size: 14px;
+            #newStockSymbol, #addStockButton {
+                width: 100%;
             }
-
-            th, td {
-                padding: 12px 8px;
-            }
-
-            .delete-btn {
-                padding: 6px 12px;
-                font-size: 12px;
+            #addStockForm {
+                flex-direction: column;
             }
         }
     </style>
