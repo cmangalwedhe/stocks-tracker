@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Information</title>
+    <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: var(--bg-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+    .container {
+        text-align: center;
+        margin: auto;
+    }
+    table {
+        margin: 0 auto;
+        border-collapse: collapse;
+        width: 80%;
+        max-width: 800px;
+    }
+    th, td {
+        text-align: center;
+        padding: 10px;
+    }
+    
+        :root {
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --text-secondary: #666666;
+            --border-color: #dddddd;
+            --symbol-color: #2c5282;
+            --link-color: #4299e1;
+            --table-header-bg: #f8f9fa;
+            --hover-bg: #f5f5f5;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #ffffff;
+            --text-secondary: #b3b3b3;
+            --border-color: #404040;
+            --symbol-color: #7eb3ff;
+            --link-color: #63b3ed;
+            --table-header-bg: #333333;
+            --hover-bg: #363636;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            color: var(--text-color);
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .theme-switch {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-switch button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .theme-switch button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        .desktop-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .desktop-table th,
+        .desktop-table td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        .desktop-table th {
+            background-color: var(--table-header-bg);
+            font-weight: bold;
+            color: var(--text-color);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .desktop-table tr:hover {
+            background-color: var(--hover-bg);
+        }
+
+        /* Column width adjustments */
+        .desktop-table th:nth-child(1),
+        .desktop-table td:nth-child(1) {
+            width: 10%;
+            text-align: left;
+        }
+
+        .desktop-table th:nth-child(2),
+        .desktop-table td:nth-child(2) {
+            width: 20%;
+            text-align: left;
+        }
+
+        .desktop-table th:nth-child(9),
+        .desktop-table td:nth-child(9) {
+            width: 8%;
+        }
+
+        .desktop-table th:nth-child(10),
+        .desktop-table td:nth-child(10) {
+            width: 8%;
+        }
+
+        .desktop-table .symbol {
+            font-weight: bold;
+            color: var(--symbol-color);
+        }
+
+        .desktop-table .number {
+            text-align: right;
+            font-family: monospace;
+            padding-right: 25px;
+        }
+
+        .stock-cards {
+            display: none;
+            padding: 10px;
+        }
+
+        .stock-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .stock-card .symbol {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--symbol-color);
+            margin-bottom: 5px;
+        }
+
+        .stock-card .company {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .stock-card .data-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .stock-card .label {
+            color: var(--text-secondary);
+        }
+
+        .stock-card .value {
+            font-weight: 500;
+            font-family: monospace;
+            text-align: right;
+        }
+
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .add-stock-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            background-color: var(--symbol-color);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .add-stock-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            margin: 0;
+            color: var(--text-color);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .submit-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--symbol-color);
+            color: white;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--text-secondary);
+            color: white;
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: #e53e3e;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .actions-cell {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #e53e3e;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-btn:hover {
+            background-color: #fed7d7;
+        }
+
+        @media (max-width: 768px) {
+            .desktop-table {
+                display: none;
+            }
+
+            .stock-cards {
+                display: block;
+            }
+
+            .header-container {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .theme-switch {
+                position: relative;
+                top: auto;
+                right: auto;
+            }
+
+            body {
+                padding: 5px;
+            }
+
+            .table-container {
+                border-radius: 0;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <h1>Stock Information Dashboard</h1>
+        <div class="theme-switch">
+            <button onclick="toggleTheme()" id="theme-toggle">
+                🌞 Light
+            </button>
+            <button onclick="openModal()" class="add-stock-btn">
+                ➕ Add Stock
+            </button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table class="desktop-table">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Company Name</th>
+                    <th>Current Price</th>
+                    <th>52W Low</th>
+                    <th>52W High</th>
+                    <th>50D Avg</th>
+                    <th>200D Avg</th>
+                    <th>1Y Target Est</th>
+                    <th>Info</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stock in stocks %}
+                <tr>
+                    <td class="symbol">{{ stock.symbol }}</td>
+                    <td>{{ stock.longName }}</td>
+                    <td class="number">${{ "%.2f"|format(stock.currentPrice) if stock.currentPrice != 'N/A' else 'N/A' }}</td>
+                    <td class="number">${{ "%.2f"|format(stock.fiftyTwoWeekLow) if stock.fiftyTwoWeekLow != 'N/A' else 'N/A' }}</td>
+                    <td class="number">${{ "%.2f"|format(stock.fiftyTwoWeekHigh) if stock.fiftyTwoWeekHigh != 'N/A' else 'N/A' }}</td>
+                    <td class="number">${{ "%.2f"|format(stock.fiftyDayAverage) if stock.fiftyDayAverage != 'N/A' else 'N/A' }}</td>
+                    <td class="number">${{ "%.2f"|format(stock.twoHundredDayAverage) if stock.twoHundredDayAverage != 'N/A' else 'N/A' }}</td>
+                    <td class="number">${{ "%.2f"|format(stock.oneYearTargetEstimate) if stock.oneYearTargetEstimate != 'N/A' else 'N/A' }}</td>
+                    <td><a href="{{ stock.url }}" target="_blank">Details</a></td>
+                    <td class="actions-cell">
+                        <button
+                            class="delete-btn"
+                            onclick="deleteStock('{{ stock.symbol }}')"
+                            title="Delete {{ stock.symbol }}"
+                        >
+                            🗑️
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="stock-cards">
+            {% for stock in stocks %}
+            <div class="stock-card">
+                <div class="symbol">{{ stock.symbol }}</div>
+                <div class="company">{{ stock.longName }}</div>
+                <div class="data-row">
+                    <span class="label">Current Price:</span>
+                    <span class="value">${{ "%.2f"|format(stock.currentPrice) if stock.currentPrice != 'N/A' else 'N/A' }}</span>
+                </div>
+                <div class="data-row">
+                    <span class="label">52W Range:</span>
+                    <span class="value">${{ "%.2f"|format(stock.fiftyTwoWeekLow) if stock.fiftyTwoWeekLow != 'N/A' else 'N/A' }} - ${{ "%.2f"|format(stock.fiftyTwoWeekHigh) if stock.fiftyTwoWeekHigh != 'N/A' else 'N/A' }}</span>
+                </div>
+                <div class="data-row">
+                    <span class="label">50D Avg:</span>
+                    <span class="value">${{ "%.2f"|format(stock.fiftyDayAverage) if stock.fiftyDayAverage != 'N/A' else 'N/A' }}</span>
+                </div>
+                <div class="data-row">
+                    <span class="label">200D Avg:</span>
+                    <span class="value">${{ "%.2f"|format(stock.twoHundredDayAverage) if stock.twoHundredDayAverage != 'N/A' else 'N/A' }}</span>
+                </div>
+                <div class="data-row">
+                    <span class="label">1Y Target Est:</span>
+                    <span class="value">${{ "%.2f"|format(stock.oneYearTargetEstimate) if stock.oneYearTargetEstimate != 'N/A' else

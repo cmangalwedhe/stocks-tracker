@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, render_template, request, jsonify
 import yfinance as yf
 from concurrent.futures import ThreadPoolExecutor
@@ -101,4 +103,4 @@ def delete_stock():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True)
