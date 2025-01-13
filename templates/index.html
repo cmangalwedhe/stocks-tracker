@@ -8,177 +8,259 @@
         :root {
             --bg-color: #f5f5f7;
             --text-color: #1d1d1f;
-            --primary-color: #0071e3;
+            --primary-color: #0077ED;
             --secondary-color: #ffffff;
             --border-color: #d2d2d7;
+            --table-hover: #f5f5f7;
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
+
         .dark-mode {
-            --bg-color: #1d1d1f;
+            --bg-color: #000000;
             --text-color: #f5f5f7;
-            --primary-color: #0071e3;
-            --secondary-color: #2c2c2e;
-            --border-color: #444444;
+            --primary-color: #0077ED;
+            --secondary-color: #1c1c1e;
+            --border-color: #333333;
+            --table-hover: #1c1c1e;
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
+
+        .dark-mode a {
+            color: #4da6ff;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
             padding: 20px;
             line-height: 1.47059;
-            font-weight: 400;
-            letter-spacing: -0.022em;
-            transition: background-color 0.3s, color 0.3s;
+            -webkit-font-smoothing: antialiased;
         }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 22px;
+            padding: 0 15px;
         }
+
         h1 {
-            font-size: 32px;
-            line-height: 1.1;
+            font-size: 40px;
             font-weight: 700;
-            letter-spacing: 0;
-            color: var(--text-color);
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
+            letter-spacing: -0.015em;
         }
+
         #addStockForm {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
             margin-bottom: 30px;
-            gap: 10px;
+            align-items: center;
         }
+
         #newStockSymbol {
             padding: 12px 16px;
             font-size: 17px;
-            border-radius: 12px;
-            width: 300px;
+            border-radius: 10px;
             border: 1px solid var(--border-color);
             background-color: var(--secondary-color);
             color: var(--text-color);
+            width: 300px;
+            transition: all 0.2s ease;
         }
+
+        #newStockSymbol:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(0,119,237,0.15);
+        }
+
         #addStockButton {
             padding: 12px 24px;
             font-size: 17px;
-            border-radius: 12px;
+            border-radius: 10px;
             background-color: var(--primary-color);
             color: #ffffff;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.2s ease;
+            font-weight: 500;
         }
+
         #addStockButton:hover {
-            background-color: #0077ed;
+            transform: scale(1.02);
+            box-shadow: 0 2px 8px rgba(0,119,237,0.3);
         }
-        .stock-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+
+        .stock-table {
+            display: none;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+            background-color: var(--secondary-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
         }
+
+        .stock-table th {
+            text-align: left;
+            padding: 16px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #86868b;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stock-table td {
+            padding: 16px;
+            font-size: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stock-table tr:hover {
+            background-color: var(--table-hover);
+        }
+
+        .stock-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .stock-symbol-cell {
+            font-weight: 600;
+            font-size: 17px !important;
+        }
+
+        .stock-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-bottom: 20px;
+        }
+
         .stock-card {
             background-color: var(--secondary-color);
-            border-radius: 18px;
+            border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: var(--card-shadow);
         }
-        .stock-symbol {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        .stock-name {
-            font-size: 16px;
-            color: #86868b;
-            margin-bottom: 15px;
-        }
-        .stock-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        .stock-info span:first-child {
-            color: #86868b;
-        }
+
         .delete-btn {
-            background-color: #ffffff;
+            background-color: transparent;
             color: var(--primary-color);
-            border: 1px solid var(--primary-color);
+            border: 1.5px solid var(--primary-color);
             padding: 8px 16px;
             border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
             font-size: 14px;
-            font-weight: 500;
-            margin-top: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
+
         .delete-btn:hover {
             background-color: var(--primary-color);
-            color: #ffffff;
+            color: white;
         }
+
         #themeToggle {
             position: fixed;
             top: 20px;
             right: 20px;
-            background-color: var(--primary-color);
-            color: #ffffff;
-            border: none;
-            padding: 10px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 20px;
-            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
         }
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 10px;
-            }
-            #newStockSymbol, #addStockButton {
-                width: 100%;
-            }
+
+        #themeToggle:hover {
+            transform: scale(1.05);
+        }
+
+        @media (min-width: 768px) {
             #addStockForm {
-                flex-direction: column;
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .stock-cards {
+                display: none;
+            }
+
+            .stock-table {
+                display: table;
             }
         }
+
+        @media (max-width: 767px) {
+            #addStockForm {
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .stock-cards {
+                display: block;
+            }
+
+            .stock-table {
+                display: none;
+            }
+        }
+
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Stock Tracker</h1>
-    <form id="addStockForm">
-        <input type="text" id="newStockSymbol" placeholder="Enter stock symbol" required>
-        <button type="submit" id="addStockButton">Add Stock</button>
-    </form>
-    <table id="stockTable">
-        <thead>
-        <tr>
-            <th>Symbol</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>52W Low</th>
-            <th>52W High</th>
-            <th>50D Avg</th>
-            <th>200D Avg</th>
-            <th>1Y Target</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody id="stockTableBody"></tbody>
-    </table>
-</div>
-<button id="themeToggle">🌓</button>
+    <div class="container">
+        <h1>Stock Tracker</h1>
+        <form id="addStockForm">
+            <input type="text" id="newStockSymbol" placeholder="Enter stock symbol" required>
+            <button type="submit" id="addStockButton">Add Stock</button>
+        </form>
 
-<script>
-    const stocksData = {{stocks | tojson | safe}};
+        <table class="stock-table">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>52W Low</th>
+                    <th>52W High</th>
+                    <th>50D Avg</th>
+                    <th>200D Avg</th>
+                    <th>1Y Target</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="stockTableBody"></tbody>
+        </table>
 
-    function renderStocks(stocks) {
-        const tableBody = document.getElementById('stockTableBody');
-        tableBody.innerHTML = '';
-        stocks.forEach(stock => {
-            const row = tableBody.insertRow();
-            row.innerHTML = `
-                    <td><a href="${stock.url}" target="_blank">${stock.symbol}</a></td>
+        <div class="stock-cards" id="stockCards"></div>
+    </div>
+
+    <button id="themeToggle">🌓</button>
+
+    <script>
+        const stocksData = {{ stocks | tojson | safe }};
+
+        function renderStocks(stocks) {
+            // Render table view (desktop)
+            const tableBody = document.getElementById('stockTableBody');
+            tableBody.innerHTML = '';
+
+            stocks.forEach(stock => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="stock-symbol-cell"><a href="https://finance.yahoo.com/quote/{${stock.symbol}/">${stock.symbol}</a></td>
                     <td>${stock.longName}</td>
                     <td>$${stock.currentPrice.toFixed(2)}</td>
                     <td>$${stock.fiftyTwoWeekLow.toFixed(2)}</td>
@@ -186,48 +268,90 @@
                     <td>$${stock.fiftyDayAverage.toFixed(2)}</td>
                     <td>$${stock.twoHundredDayAverage.toFixed(2)}</td>
                     <td>$${stock.oneYearTargetEstimate.toFixed(2)}</td>
-                    <td><button class="delete-btn" onclick="deleteStock('${stock.symbol}')">Remove</button></td>
+                    <td><button class="delete-btn" onclick="deleteStock('${stock.symbol}')">Delete</button></td>
                 `;
+                tableBody.appendChild(row);
+            });
+
+            // Render cards view (mobile)
+            const stockCards = document.getElementById('stockCards');
+            stockCards.innerHTML = '';
+
+            stocks.forEach(stock => {
+                const card = document.createElement('div');
+                card.className = 'stock-card';
+                card.innerHTML = `
+                    <div class="stock-card-header">
+                        <div class="stock-symbol">${stock.symbol}</div>
+                        <button class="delete-btn" onclick="deleteStock('${stock.symbol}')">Delete</button>
+                    </div>
+                    <div class="stock-name">${stock.longName}</div>
+                    <div class="stock-price">$${stock.currentPrice.toFixed(2)}</div>
+                    <div class="stock-metrics">
+                        <div class="metric">
+                            <span class="metric-label">52W Low</span>
+                            <span class="metric-value">$${stock.fiftyTwoWeekLow.toFixed(2)}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">52W High</span>
+                            <span class="metric-value">$${stock.fiftyTwoWeekHigh.toFixed(2)}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">50D Avg</span>
+                            <span class="metric-value">$${stock.fiftyDayAverage.toFixed(2)}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">200D Avg</span>
+                            <span class="metric-value">$${stock.twoHundredDayAverage.toFixed(2)}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">1Y Target</span>
+                            <span class="metric-value">$${stock.oneYearTargetEstimate.toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+                stockCards.appendChild(card);
+            });
+        }
+
+        function addStock(symbol) {
+            fetch('/add_stock', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: `symbol=${symbol}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) location.reload();
+                else alert(data.message);
+            });
+        }
+
+        function deleteStock(symbol) {
+            fetch('/delete_stock', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: `symbol=${symbol}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) location.reload();
+                else alert(data.message);
+            });
+        }
+
+        document.getElementById('addStockForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const symbol = document.getElementById('newStockSymbol').value.trim();
+            addStock(symbol);
         });
-    }
 
-    function addStock(symbol) {
-        fetch('/add_stock', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: `symbol=${symbol}`
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) location.reload();
-                else alert(data.message);
-            });
-    }
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+        });
 
-    function deleteStock(symbol) {
-        fetch('/delete_stock', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: `symbol=${symbol}`
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) location.reload();
-                else alert(data.message);
-            });
-    }
-
-    document.getElementById('addStockForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const symbol = document.getElementById('newStockSymbol').value;
-        addStock(symbol);
-    });
-
-    document.getElementById('themeToggle').addEventListener('click', function () {
-        document.body.classList.toggle('dark-mode');
-    });
-
-    renderStocks(stocksData);
-</script>
+        // Initialize
+        renderStocks(stocksData);
+    </script>
 </body>
 </html>
