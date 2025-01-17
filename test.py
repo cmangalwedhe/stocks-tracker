@@ -1,5 +1,3 @@
-import json
-
 from flask import Flask, render_template, request, jsonify
 import yfinance as yf
 from concurrent.futures import ThreadPoolExecutor
@@ -100,6 +98,8 @@ def delete_stock():
         return jsonify({'success': True, 'message': 'Stock removed successfully'})
 
     return jsonify({'success': False, 'message': 'Stock not found'})
+
+
 
 
 if __name__ == '__main__':
