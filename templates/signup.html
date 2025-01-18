@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Trading Login</title>
+    <title>Create Trading Account</title>
     <style>
         * {
             margin: 0;
@@ -18,6 +18,7 @@
             flex-direction: column;
             align-items: center;
             background-color: #f5f5f7;
+            padding: 1rem;
         }
 
         .logo {
@@ -38,6 +39,7 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             width: 90%;
             max-width: 430px;
+            margin-bottom: 2rem;
         }
 
         h1 {
@@ -58,6 +60,11 @@
             position: relative;
         }
 
+        .name-group {
+            display: flex;
+            gap: 1rem;
+        }
+
         input {
             width: 100%;
             padding: 1rem;
@@ -72,7 +79,25 @@
             border-color: #0071e3;
         }
 
-        .primary-button {
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-top: 0.25rem;
+        }
+
+        .checkbox-group label {
+            font-size: 0.9rem;
+            color: #494949;
+            line-height: 1.4;
+        }
+
+        button {
             background: #0071e3;
             color: white;
             border: none;
@@ -82,72 +107,33 @@
             font-weight: 500;
             cursor: pointer;
             transition: background-color 0.2s;
-            text-align: center;
-            text-decoration: none;
-            display: block;
+            margin-top: 1rem;
         }
 
-        .primary-button:hover {
+        button:hover {
             background: #0077ed;
         }
 
-        .secondary-button {
-            background: transparent;
-            color: #0071e3;
-            border: 2px solid #0071e3;
-            padding: 0.9rem;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            text-decoration: none;
-            display: block;
-            margin-top: 1rem;
-        }
-
-        .secondary-button:hover {
-            background: #f5f5f7;
-        }
-
-        .forgot-password {
+        .login-link {
             text-align: center;
             margin-top: 1rem;
-        }
-
-        .forgot-password a {
-            color: #0071e3;
-            text-decoration: none;
             font-size: 0.9rem;
         }
 
-        .forgot-password a:hover {
+        .login-link a {
+            color: #0071e3;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
             text-decoration: underline;
         }
 
-        .divider {
-            margin: 1.5rem 0;
-            text-align: center;
-            position: relative;
-        }
-
-        .divider::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 100%;
-            height: 1px;
-            background: #d2d2d7;
-        }
-
-        .divider span {
-            background: white;
-            padding: 0 1rem;
-            color: #86868b;
-            font-size: 0.9rem;
-            position: relative;
+        .password-requirements {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.25rem;
+            margin-left: 0.5rem;
         }
 
         @media (max-width: 480px) {
@@ -155,6 +141,11 @@
                 width: 100%;
                 border-radius: 0;
                 box-shadow: none;
+            }
+
+            .name-group {
+                flex-direction: column;
+                gap: 1rem;
             }
         }
     </style>
@@ -168,23 +159,39 @@
         </svg>
     </div>
     <div class="container">
-        <h1>Trading Account Login</h1>
-        <form action="/login" method="POST">
+        <h1>Create Account</h1>
+        <form action="/signup" method="POST">
+            <div class="name-group">
+                <div class="input-group">
+                    <input type="text" name="firstName" placeholder="First Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" name="lastName" placeholder="Last Name" required>
+                </div>
+            </div>
             <div class="input-group">
                 <input type="email" name="email" placeholder="Email" required>
             </div>
             <div class="input-group">
-                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="password" placeholder="Password" required
+                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                       title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters">
+                <div class="password-requirements">
+                    Password must be at least 8 characters long and include uppercase, lowercase, and numbers
+                </div>
             </div>
-            <button type="submit" class="primary-button">Sign In</button>
-            <div class="forgot-password">
-                <a href="#">Forgot Password?</a>
+            <div class="input-group">
+                <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">I agree to the Terms of Service and Privacy Policy. I acknowledge that my personal information will be processed in accordance with the privacy notice.</label>
+            </div>
+            <button type="submit">Create Account</button>
+            <div class="login-link">
+                Already have an account? <a href="/login">Sign in</a>
             </div>
         </form>
-        <div class="divider">
-            <span>or</span>
-        </div>
-        <a href="/signup" class="secondary-button">Create New Account</a>
     </div>
 </body>
 </html>

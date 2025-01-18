@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Tracker</title>
+    <style>
+        :root {
+            --bg-color: #f5f5f7;
+            --card-bg: #ffffff;
+            --text-color: #1d1d1f;
+            --primary-color: #0077ED;
+            --border-color: #d2d2d7;
+        }
+
+        .dark-mode {
+            --bg-color: #000000;
+            --card-bg: #1c1c1e;
+            --primary-color: #4da6ff;;
+            --text-color: #f5f5f7;
+            --border-color: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            padding: 16px;
+            line-height: 1.4;
+            min-width: 320px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 8px;
+        }
+
+        h1 {
+            font-size: clamp(24px, 5vw, 32px);
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        /* Form Styles */
+        .add-stock-form {
+            margin-bottom: 24px;
+            width: 100%;
+        }
+
+        .form-group {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            flex-direction: column;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            transition: all 0.2s ease;
+        }
+
+
+        button:hover {
+            background: #0066cc;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+
+        /* Stock Cards */
+        .stock-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .stock-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .stock-link:hover {
+            text-decoration: underline;
+            opacity: 0.8;
+        }
+
+        .stock-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .stock-symbol {
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stock-price {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        .stock-name {
+            color: #666;
+            margin-bottom: 16px;
+            font-size: 14px;
+            word-break: break-word;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            width: 100%;
+        }
+
+        .metric {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .metric-value {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .delete-btn {
+            padding: 4px 12px;
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .delete-btn:hover {
+            background: rgba(0, 119, 237, 0.1);
+            color: #0066cc;
+            border-color: #0066cc;
+        }
+
+        .delete-btn:active {
+            transform: translateY(0);
+        }
+
+        #themeToggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        #themeToggle:hover {
+            background: var(--border-color);
+            transform: scale(1.1);
+        }
+
+        #themeToggle:active {
+            transform: scale(1);
+        }
+
+        .stock-table {
+            display: none;
+        }
+
+        button:focus-visible,
+        .delete-btn:focus-visible,
+        #themeToggle:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        @media (hover: none) {
+            button:hover,
+            .delete-btn:hover,
+            #themeToggle:hover {
+                transform: none;
+                box-shadow: none;
+            }
+        }
+
+        /* Desktop styles */
+        /* Desktop Styles */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 1200px;
+            }
+
+            .form-group {
+                flex-direction: row;
+            }
+
+            .form-group input {
+                flex-grow: 1;
+                width: auto;
+            }
+
+            .form-group button {
+                width: 140px;
+                flex-shrink: 0;
+            }
+
+            .stock-list {
+                display: none;
+            }
+
+            .stock-table {
+                display: table;
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+                background: var(--card-bg);
+                border-radius: 12px;
+                overflow: hidden;
+            }
+
+            th, td {
+                padding: 16px;
+                text-align: left;
+                border-bottom: 1px solid var(--border-color);
+                white-space: nowrap;
+            }
+
+            th {
+                font-weight: 600;
+                color: #666;
+            }
+        }
+
+        .dark-mode a {
+            color: #4da6ff;
+        }
+
+       /* Mobile-specific styles */
+        @media (max-width: 767px) {
+            .delete-btn {
+                width: 60px;
+                height: 32px;
+                padding: 0;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+                margin-left: auto;
+                min-width: unset;
+            }
+
+            .card-header {
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        /* Prevent text selection */
+        .no-select {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Tracker</h1>
+
+        <form class="add-stock-form">
+            <div class="form-group">
+                <input type="text" id="stockSymbol" placeholder="Enter stock symbol" required>
+                <button type="submit">Add Stock</button>
+            </div>
+        </form>
+
+        <!-- Mobile View -->
+        <div class="stock-list" id="stockList"></div>
+
+        <!-- Desktop View -->
+        <table class="stock-table">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>52W Low</th>
+                    <th>52W High</th>
+                    <th>50D Avg</th>
+                    <th>200D Avg</th>
+                    <th>1Y Target</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="stockTableBody"></tbody>
+        </table>
+    </div>
+
+    <button id="themeToggle">🌓</button>
+
+    <script>
+        const stocksData = {{ stocks | tojson | safe }};
+
+        function formatPrice(price) {
+            return typeof price === 'number' ? `$${price.toFixed(2)}` : 'N/A';
+        }
+
+        function renderStocks(stocks) {
+            // Mobile view
+            const stockList = document.getElementById('stockList');
+            stockList.innerHTML = '';
+
+            stocks.forEach(stock => {
+                const card = document.createElement('div');
+                card.className = 'stock-card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="stock-symbol">
+                            <a href="${stock.url}" target="_blank" class="stock-link">${stock.symbol}</a>
+                        </span>
+                        <button class="delete-btn" onclick="deleteStock('${stock.symbol}')">Delete</button>
+                    </div>
+                    <div class="stock-name">${stock.longName || 'N/A'}</div>
+                    <div class="stock-price">${formatPrice(stock.currentPrice)}</div>
+                    <div class="metrics">
+                        <div class="metric">
+                            <span class="metric-label">52W Low</span>
+                            <span class="metric-value">${formatPrice(stock.fiftyTwoWeekLow)}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">52W High</span>
+                            <span class="metric-value">${formatPrice(stock.fiftyTwoWeekHigh)}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">50D Avg</span>
+                            <span class="metric-value">${formatPrice(stock.fiftyDayAverage)}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">200D Avg</span>
+                            <span class="metric-value">${formatPrice(stock.twoHundredDayAverage)}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">1Y Target</span>
+                            <span class="metric-value">${formatPrice(stock.oneYearTargetEstimate)}</span>
+                        </div>
+                    </div>
+                `;
+                stockList.appendChild(card);
+            });
+
+            // Desktop view
+            const tableBody = document.getElementById('stockTableBody');
+            tableBody.innerHTML = '';
+
+            stocks.forEach(stock => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><a href="${stock.url}" target="_blank" class="stock-link">${stock.symbol}</a></td>
+                    <td>${stock.longName || 'N/A'}</td>
+                    <td>${formatPrice(stock.currentPrice)}</td>
+                    <td>${formatPrice(stock.fiftyTwoWeekLow)}</td>
+                    <td>${formatPrice(stock.fiftyTwoWeekHigh)}</td>
+                    <td>${formatPrice(stock.fiftyDayAverage)}</td>
+                    <td>${formatPrice(stock.twoHundredDayAverage)}</td>
+                    <td>${formatPrice(stock.oneYearTargetEstimate)}</td>
+                    <td><button class="delete-btn" onclick="deleteStock('${stock.symbol}')">Delete</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function addStock(symbol) {
+            fetch('/add_stock', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: `symbol=${symbol}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) location.reload();
+                else alert(data.message);
+            });
+        }
+
+        function deleteStock(symbol) {
+            fetch('/delete_stock', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: `symbol=${symbol}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) location.reload();
+                else alert(data.message);
+            });
+        }
+
+        document.querySelector('.add-stock-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const symbol = document.getElementById('stockSymbol').value.trim();
+            if (symbol) addStock(symbol);
+        });
+
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        // Initialize
+        renderStocks(stocksData);
+    </script>
+</body>
+</html>
