@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from flask_bcrypt import check_password_hash
 from flask_login import login_user, login_required, logout_user
+from werkzeug.security import generate_password_hash, check_password_hash
 from models import db
 from models import User
 
@@ -21,7 +21,7 @@ def login_post():
     user = User.query.filter_by(email=email).first()
 
     if not user or not check_password_hash(user.password, password):
-        flash('Invalid username or password entered, please try again.')
+        flash('Invalid username or password entered, please try again.', 'error')
         return redirect(url_for('auth.login'))
 
     login_user(user, remember=remember)
@@ -35,6 +35,26 @@ def signup():
 
 @auth.route("/signup", methods=['POST'])
 def signup_post():
+    first_name = request.form.get('firstName')
+    last_name = request.form.get('lastName')
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        flash("You already have an account. Please sign in.")
+        return redirect(url_for('auth.login'))
+
+    new_user = User()
+    new_user.first_name = first_name
+    new_user.last_name = last_name
+    new_user.email = email
+    new_user.password = generate_password_hash(password)
+
+    db.session.add(new_user)
+    db.session.commit()
+
     return redirect(url_for("auth.login"))
 
 

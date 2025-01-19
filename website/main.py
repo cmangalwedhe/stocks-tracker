@@ -1,13 +1,10 @@
-from functools import lru_cache
-
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required, current_user
 from concurrent.futures import ThreadPoolExecutor
 import yfinance as yf
 import time
 from functools import lru_cache
 from models import db
-
 
 # Store stocks list in memory
 STOCKS = ['agx', 'alab', 'arm', 'asml', 'aspn', 'cava', 'crwd', 'deck', 'dell', 'dkng',
@@ -53,7 +50,48 @@ def get_all_stock_data(timestamp):
 
     return [r for r in results if r is not None]
 
+
 main = Blueprint('main', __name__)
+
+
+@main.route('/add_stock', methods=['POST'])
+def add_stock():
+    symbol = request.form.get('symbol', '').strip().lower()
+
+    if not symbol:
+        return jsonify({'success': False, 'message': 'No symbol provided'})
+
+    if symbol in STOCKS:
+        return jsonify({'success': False, 'message': 'Stock already in list'})
+
+    # Verify the stock exists
+    try:
+        ticker = yf.Ticker(symbol)
+        info = ticker.get_info()
+        if info:
+            STOCKS.append(symbol)
+            STOCKS.sort()
+            # Invalidate cache by updating the timestamp
+            get_all_stock_data.cache_clear()
+            return jsonify({'success': True, 'message': 'Stock added successfully'})
+    except:
+        pass
+
+    return jsonify({'success': False, 'message': 'Invalid stock symbol'})
+
+
+@main.route('/delete_stock', methods=['POST'])
+def delete_stock():
+    symbol = request.form.get('symbol', '').strip().lower()
+
+    if symbol in STOCKS:
+        STOCKS.remove(symbol)
+        # Invalidate cache
+        get_all_stock_data.cache_clear()
+        return jsonify({'success': True, 'message': 'Stock removed successfully'})
+
+    return jsonify({'success': False, 'message': 'Stock not found'})
+
 
 @main.route('/')
 def index():
@@ -63,4 +101,7 @@ def index():
 @main.route('/profile')
 @login_required
 def profile():
-    return render_template('index.html', name=current_user)
+    timestamp = get_cached_timestamp()
+
+    stock_data = get_all_stock_data(timestamp)
+    return render_template('index.html', stocks=stock_data)

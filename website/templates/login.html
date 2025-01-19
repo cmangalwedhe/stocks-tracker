@@ -150,6 +150,67 @@
             position: relative;
         }
 
+        /* Flash Message Styles */
+        .flash-message {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideDown 0.3s ease-out;
+            margin-bottom: 0.5rem;
+        }
+
+        .flash-success {
+            background-color: #dcf7e3;
+            color: #0a7724;
+            border: 1px solid #34c759;
+        }
+
+        .flash-error {
+            background-color: #ffe5e5;
+            color: #cc0000;
+            border: 1px solid #ff3b30;
+        }
+
+        .flash-info {
+            background-color: #e5f1ff;
+            color: #0071e3;
+            border: 1px solid #0071e3;
+        }
+
+        .close-flash {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            margin-left: 0.5rem;
+            color: inherit;
+            opacity: 0.7;
+        }
+
+        .close-flash:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translate(-50%, -100%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+
         @media (max-width: 480px) {
             .container {
                 width: 100%;
@@ -160,6 +221,19 @@
     </style>
 </head>
 <body>
+    <div id="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        {{ message }}
+                        <button class="close-flash" onclick="this.parentElement.remove()">×</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
     <div class="logo">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="24" height="24" rx="12" fill="#0071e3"/>
@@ -184,7 +258,21 @@
         <div class="divider">
             <span>or</span>
         </div>
-        <a href="/signup" class="secondary-button">Create New Account</a>
+        <a href="{{ url_for('auth.signup') }}" class="secondary-button">Create New Account</a>
     </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(function (message) {
+               setTimeout(function() {
+                   if (message.parentElement) {
+                       message.remove();
+                   }
+               }, 5000);
+            });
+        });
+    </script>
 </body>
 </html>
