@@ -103,7 +103,7 @@ def delete_stock():
 
 @main.route('/')
 def index():
-    return current_user.get_first_name()
+    return render_template('profile.html')
 
 
 @main.route('/profile')

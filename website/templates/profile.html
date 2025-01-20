@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockVision - Smart Stock Analysis</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+
+        .button {
+            padding: 12px 24px;
+            border-radius: 9999px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .button-primary {
+            background-color: #000;
+            color: white;
+        }
+
+        .button-primary:hover {
+            background-color: #333;
+        }
+
+        .button-secondary {
+            background-color: #f3f4f6;
+            color: #111;
+        }
+
+        .button-secondary:hover {
+            background-color: #e5e7eb;
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background-color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .input-email {
+            padding: 12px 24px;
+            border-radius: 9999px;
+            border: 1px solid #e5e7eb;
+            width: 100%;
+            max-width: 300px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-email:focus {
+            border-color: #000;
+        }
+
+        /* Mobile Navigation */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: white;
+            z-index: 50;
+            padding: 2rem;
+        }
+
+        .mobile-nav.active {
+            display: block;
+        }
+
+        .menu-button {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            /* Header/Navigation */
+            .menu-button {
+                display: block;
+            }
+
+            .desktop-nav {
+                display: none;
+            }
+
+            /* Hero Section */
+            h1 {
+                font-size: 2.5rem !important;
+                line-height: 1.2 !important;
+                padding: 0 1rem;
+            }
+
+            .hero-text {
+                font-size: 1.125rem !important;
+                padding: 0 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 1rem !important;
+                padding: 0 1rem;
+            }
+
+            .hero-buttons .button {
+                width: 100%;
+                text-align: center;
+            }
+
+            /* Features Section */
+            .features-grid {
+                grid-template-columns: 1fr !important;
+                gap: 2rem !important;
+                padding: 0 1rem;
+            }
+
+            /* Coming Soon Section */
+            .coming-soon-form {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 0 1rem;
+            }
+
+            .coming-soon-form input,
+            .coming-soon-form button {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            /* General Spacing */
+            section {
+                padding: 3rem 1rem !important;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* Even smaller screens */
+            h1 {
+                font-size: 2rem !important;
+            }
+
+            .hero-text {
+                font-size: 1rem !important;
+            }
+
+            .feature-icon {
+                width: 48px;
+                height: 48px;
+            }
+
+            .feature-icon svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="px-6 py-4 border-b border-gray-100">
+        <nav class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="text-2xl font-semibold">StockVision</div>
+
+            <!-- Desktop Navigation -->
+            <div class="desktop-nav space-x-8">
+                <a href="#" class="text-gray-600 hover:text-gray-900 transition-all">About</a>
+                <a href="#" class="text-gray-600 hover:text-gray-900 transition-all">Features</a>
+                <button class="button button-primary">Get Started</button>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="menu-button p-2" onclick="toggleMobileMenu()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12h18M3 6h18M3 18h18"/>
+                </svg>
+            </button>
+        </nav>
+
+        <!-- Mobile Navigation -->
+        <div class="mobile-nav" id="mobileNav">
+            <div class="flex justify-end mb-8">
+                <button onclick="toggleMobileMenu()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="flex flex-col gap-6 text-center">
+                <a href="#" class="text-xl text-gray-900">About</a>
+                <a href="#" class="text-xl text-gray-900">Features</a>
+                <button class="button button-primary mt-4">Get Started</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-16 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-6xl font-bold text-gray-900 mb-6">
+                Stock Analysis,<br>
+                Reimagined.
+            </h1>
+            <p class="hero-text text-xl text-gray-600 mb-12 leading-relaxed">
+                Access essential stock information with unprecedented clarity.<br class="hidden md:block">
+                Powered by advanced AI for smarter investment decisions.
+            </p>
+            <div class="hero-buttons flex justify-center gap-4">
+                <a class="button button-primary" href="{{ url_for('auth.signup') }}">Try Now</a>
+                <a class="button button-secondary flex items-center justify-center gap-2" href="{{ url_for('auth.login') }}">
+                    Sign In
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-24 bg-gray-50 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="features-grid grid grid-cols-3 gap-12">
+                <!-- Feature 1 -->
+                <div class="text-center p-6">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.3-4.3"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Real-Time Data</h3>
+                    <p class="text-gray-600">
+                        Access comprehensive stock information from Yahoo Finance instantly, keeping you informed of market movements.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="text-center p-6">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="m23 6-9.5 9.5-5-5L1 18"/>
+                            <path d="M17 6h6v6"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">AI Predictions</h3>
+                    <p class="text-gray-600">
+                        Coming soon: Advanced machine learning algorithms to forecast potential price movements and trends.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="text-center p-6">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Reliable Analysis</h3>
+                    <p class="text-gray-600">
+                        Trust in data-driven insights backed by robust financial models and real-time market data.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coming Soon Section -->
+    <section class="py-24 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-6">AI Price Prediction</h2>
+            <p class="text-xl text-gray-600 mb-12">
+                Our advanced AI system is learning from millions of data points to provide accurate price predictions. Be the first to know when it launches.
+            </p>
+            <div class="max-w-md mx-auto">
+                <div class="coming-soon-form flex gap-4">
+                    <input type="email" placeholder="Enter your email" class="input-email">
+                    <button class="button button-primary">Notify Me</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 py-12 px-6">
+        <div class="max-w-6xl mx-auto text-center text-gray-600">
+            <p class="mb-4">© 2025 StockVision. All rights reserved.</p>
+            <div class="space-x-6">
+                <a href="#" class="hover:text-gray-900 transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-gray-900 transition-colors">Terms of Service</a>
+                <a href="#" class="hover:text-gray-900 transition-colors">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const mobileNav = document.getElementById('mobileNav');
+            mobileNav.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

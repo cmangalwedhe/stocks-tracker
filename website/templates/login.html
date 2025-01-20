@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Trading Login</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
@@ -18,12 +21,13 @@
             flex-direction: column;
             align-items: center;
             background-color: #f5f5f7;
+            padding: 1rem;
         }
 
         .logo {
             margin: 2rem 0;
-            width: 64px;
-            height: 64px;
+            width: 56px;
+            height: 56px;
         }
 
         .logo svg {
@@ -34,18 +38,19 @@
         .container {
             background: white;
             padding: 2rem;
-            border-radius: 18px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
             width: 90%;
-            max-width: 430px;
+            max-width: 480px;
         }
 
         h1 {
-            font-size: 1.8rem;
-            font-weight: 500;
+            font-size: 1.75rem;
+            font-weight: 600;
             margin-bottom: 1.5rem;
             text-align: center;
             color: #1d1d1f;
+            letter-spacing: -0.02em;
         }
 
         form {
@@ -60,66 +65,83 @@
 
         input {
             width: 100%;
-            padding: 1rem;
-            border: 1px solid #d2d2d7;
-            border-radius: 12px;
+            padding: 0.875rem 1.125rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 9999px;
             font-size: 1rem;
             outline: none;
-            transition: border-color 0.2s;
+            transition: all 0.3s ease;
         }
 
         input:focus {
-            border-color: #0071e3;
+            border-color: #000;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
         }
 
         .primary-button {
-            background: #0071e3;
+            background: #000;
             color: white;
             border: none;
-            padding: 1rem;
-            border-radius: 12px;
+            padding: 0.875rem;
+            border-radius: 9999px;
             font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.3s ease;
             text-align: center;
             text-decoration: none;
             display: block;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .primary-button:hover {
-            background: #0077ed;
+            background: #333;
+            transform: translateY(-1px);
+        }
+
+        .primary-button:active {
+            transform: translateY(0);
         }
 
         .secondary-button {
             background: transparent;
-            color: #0071e3;
-            border: 2px solid #0071e3;
-            padding: 0.9rem;
-            border-radius: 12px;
+            color: #000;
+            border: 2px solid #000;
+            padding: 0.775rem;
+            border-radius: 9999px;
             font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             text-align: center;
             text-decoration: none;
             display: block;
             margin-top: 1rem;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .secondary-button:hover {
             background: #f5f5f7;
+            transform: translateY(-1px);
+        }
+
+        .secondary-button:active {
+            transform: translateY(0);
         }
 
         .forgot-password {
             text-align: center;
-            margin-top: 1rem;
+            margin-top: 0.875rem;
         }
 
         .forgot-password a {
-            color: #0071e3;
+            color: #000;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .forgot-password a:hover {
@@ -127,7 +149,7 @@
         }
 
         .divider {
-            margin: 1.5rem 0;
+            margin: 1.25rem 0;
             text-align: center;
             position: relative;
         }
@@ -139,51 +161,52 @@
             top: 50%;
             width: 100%;
             height: 1px;
-            background: #d2d2d7;
+            background: #e5e7eb;
         }
 
         .divider span {
             background: white;
             padding: 0 1rem;
-            color: #86868b;
-            font-size: 0.9rem;
+            color: #6b7280;
+            font-size: 0.9375rem;
             position: relative;
         }
 
-        /* Flash Message Styles */
         .flash-message {
             position: fixed;
             top: 1rem;
             left: 50%;
             transform: translateX(-50%);
-            padding: 1rem 2rem;
-            border-radius: 8px;
+            padding: 0.875rem 1.5rem;
+            border-radius: 12px;
             font-weight: 500;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             animation: slideDown 0.3s ease-out;
             margin-bottom: 0.5rem;
+            width: calc(100% - 2rem);
+            max-width: 480px;
         }
 
         .flash-success {
-            background-color: #dcf7e3;
-            color: #0a7724;
-            border: 1px solid #34c759;
+            background-color: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #86efac;
         }
 
         .flash-error {
-            background-color: #ffe5e5;
-            color: #cc0000;
-            border: 1px solid #ff3b30;
+            background-color: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
         }
 
         .flash-info {
-            background-color: #e5f1ff;
-            color: #0071e3;
-            border: 1px solid #0071e3;
+            background-color: #f0f9ff;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
         }
 
         .close-flash {
@@ -191,9 +214,11 @@
             border: none;
             cursor: pointer;
             padding: 0.25rem;
-            margin-left: 0.5rem;
+            margin-left: auto;
             color: inherit;
             opacity: 0.7;
+            transition: opacity 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .close-flash:hover {
@@ -211,11 +236,65 @@
             }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 640px) {
+            body {
+                padding: 0.75rem;
+                justify-content: center;
+            }
+
             .container {
+                padding: 1.5rem;
                 width: 100%;
-                border-radius: 0;
-                box-shadow: none;
+                border-radius: 16px;
+            }
+
+            .logo {
+                margin: 1.5rem 0;
+                width: 48px;
+                height: 48px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 1.25rem;
+            }
+
+            input {
+                font-size: 16px;
+                padding: 0.75rem 1rem;
+            }
+
+            .primary-button,
+            .secondary-button {
+                padding: 0.75rem;
+                font-size: 16px;
+            }
+
+            .forgot-password a {
+                font-size: 0.875rem;
+                padding: 0.75rem;
+            }
+
+            .flash-message {
+                padding: 0.75rem 1.25rem;
+                border-radius: 10px;
+                font-size: 0.875rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .container {
+                padding: 1.25rem;
+            }
+
+            h1 {
+                font-size: 1.25rem;
+            }
+        }
+
+        @media (max-height: 667px) {
+            .logo {
+                margin: 1rem 0;
             }
         }
     </style>
@@ -236,7 +315,7 @@
 
     <div class="logo">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="24" height="24" rx="12" fill="#0071e3"/>
+            <rect width="24" height="24" rx="12" fill="#000"/>
             <path d="M6 12.5L10 8.5L14 12.5L18 8.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M6 15.5L10 11.5L14 15.5L18 11.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -260,7 +339,6 @@
         </div>
         <a href="{{ url_for('auth.signup') }}" class="secondary-button">Create New Account</a>
     </div>
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
