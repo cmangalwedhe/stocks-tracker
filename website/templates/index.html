@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,41 +8,63 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+        :root {
+            --background-color: #f5f5f7;
+            --text-color: #1d1d1f;
+            --card-background: #ffffff;
+            --border-color: #e5e7eb;
+            --secondary-text: #6b7280;
+            --button-background: #000000;
+            --button-text: #ffffff;
+            --button-hover: #333333;
+            --card-shadow: rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="dark"] {
+            --background-color: #1a1a1a;
+            --text-color: #ffffff;
+            --card-background: #2d2d2d;
+            --border-color: #404040;
+            --secondary-text: #a0a0a0;
+            --button-background: #ffffff;
+            --button-text: #000000;
+            --button-hover: #e5e5e5;
+            --card-shadow: rgba(0, 0, 0, 0.2);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        :root {
-            --bg-color: #f5f5f7;
-            --card-bg: #ffffff;
-            --text-color: #1d1d1f;
-            --border-color: #e5e7eb;
-            --accent-color: #06c;
-            --accent-hover: #0051a8;
-            --muted-text: #86868b;
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #000000;
-            --card-bg: #1c1c1e;
-            --text-color: #f5f5f7;
-            --border-color: #333333;
-            --accent-color: #0a84ff;
-            --accent-hover: #d5d5d5;
-            --muted-text: #98989d;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            background: var(--bg-color);
-            color: var(--text-color);
             min-height: 100vh;
-            padding: 2rem 1rem;
-            padding-top: 5rem;  /* Added extra padding for fixed header */
-            transition: all 0.3s ease;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 1rem;
+            padding-top: 4rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            margin: 1.5rem auto;
+        }
+
+        .logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo svg rect {
+            fill: var(--button-background);
+        }
+
+        .logo svg path {
+            stroke: var(--button-text);
         }
 
         .container {
@@ -51,18 +73,13 @@
             padding: 0 1rem;
         }
 
-        .logo {
-            width: 40px;
-            height: 40px;
-            margin: 0 auto 2rem;
-        }
-
         h1 {
             font-size: 1.75rem;
             font-weight: 600;
+            margin-bottom: 1.5rem;
             text-align: center;
-            margin-bottom: 2rem;
             color: var(--text-color);
+            letter-spacing: -0.02em;
         }
 
         .header-controls {
@@ -70,48 +87,36 @@
             top: 0;
             left: 0;
             right: 0;
-            padding: 1rem;
-            background: var(--bg-color);
+            padding: 0.75rem 1rem;
+            background: var(--background-color);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: flex-end;
             gap: 0.75rem;
             align-items: center;
             z-index: 1000;
+            transition: background-color 0.3s ease;
         }
 
-        #themeToggle {
-            width: 36px;
-            height: 36px;
-            border-radius: 6px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            font-size: 16px;
-            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        #themeToggle:hover {
-            background: rgba(2, 21, 43, 0.1);
-        }
-
-        .logout-btn {
-            padding: 8px 16px;
-            background: var(--card-bg);
-            color: var(--text-color);
+        #themeToggle, .logout-btn {
+            background: var(--button-background);
+            color: var(--button-text);
             border: none;
-            border-radius: 6px;
-            font-size: 14px;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
             font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
             text-decoration: none;
-            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-            transition: all 0.2s ease;
+            height: 36px;
+            display: flex;
+            align-items: center;
         }
 
-        .logout-btn:hover {
-            background: rgba(2, 21, 43, 0.1);
+        #themeToggle:hover, .logout-btn:hover {
+            background: var(--button-hover);
+            transform: translateY(-1px);
         }
 
         .add-stock-form {
@@ -121,50 +126,58 @@
 
         .form-group {
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
+            align-items: center;
         }
 
         input {
-            flex: 1;
-            padding: 0.875rem 1.125rem;
+            width: 100%;
+            padding: 0.625rem 1rem;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 1rem;
-            background: var(--card-bg);
-            color: var(--text-color);
+            border-radius: 9999px;
+            font-size: 0.875rem;
             outline: none;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            height: 40px;
+            background: var(--card-background);
+            color: var(--text-color);
         }
 
         input:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+            border-color: var(--button-background);
+            box-shadow: 0 0 0 2px var(--card-shadow);
         }
 
         .add-stock-form button {
-            padding: 0.875rem 1.5rem;
-            background: var(--card-bg);
-            color: var(--text-color);
+            background: var(--button-background);
+            color: var(--button-text);
             border: none;
-            border-radius: 6px;
-            font-size: 14px;
+            padding: 0 1.5rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 100px;
         }
 
         .add-stock-form button:hover {
-            background: var(--accent-hover);
-            color: #000000;
+            background: var(--button-hover);
+            transform: translateY(-1px);
         }
 
         .stock-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            padding: 1.25rem;
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 4px 24px var(--card-shadow);
             margin-bottom: 1rem;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease;
         }
 
         .card-header {
@@ -180,7 +193,7 @@
         }
 
         .stock-name {
-            color: var(--muted-text);
+            color: var(--secondary-text);
             font-size: 0.875rem;
             margin-bottom: 1rem;
         }
@@ -189,12 +202,13 @@
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1.25rem;
+            color: var(--text-color);
         }
 
         .stock-link {
-            color: var(--accent-color);
+            color: var(--text-color);
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
 
         .stock-link:hover {
@@ -203,17 +217,19 @@
 
         .delete-btn {
             background: transparent;
-            color: var(--accent-color);
-            border: none;
-            padding: 4px 12px;
-            font-size: 14px;
-            border-radius: 6px;
+            color: var(--text-color);
+            border: 2px solid var(--text-color);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
 
         .delete-btn:hover {
-            background: rgba(0, 102, 204, 0.1);
+            background: var(--background-color);
+            transform: translateY(-1px);
         }
 
         .metrics {
@@ -229,45 +245,43 @@
         }
 
         .metric-label {
-            color: var(--muted-text);
-            font-size: 0.75rem;
+            color: var(--secondary-text);
+            font-size: 0.875rem;
         }
 
         .metric-value {
-            font-size: 0.875rem;
+            font-size: 1rem;
             font-weight: 500;
+            color: var(--text-color);
         }
 
         .stock-table {
             width: 100%;
-            background: var(--card-bg);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            background: var(--card-background);
+            border-radius: 24px;
+            box-shadow: 0 4px 24px var(--card-shadow);
             overflow: hidden;
+            transition: background-color 0.3s ease;
         }
 
         .stock-table th,
         .stock-table td {
-            padding: 1rem;
+            padding: 1.5rem;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
-            font-size: 14px;
+            font-size: 0.875rem;
+            color: var(--text-color);
         }
 
         .stock-table th {
-            color: var(--muted-text);
+            color: var(--secondary-text);
             font-weight: 500;
-            background: var(--card-bg);
+            background: var(--card-background);
         }
 
         @media (min-width: 768px) {
             .stock-list {
                 display: none;
-            }
-
-            .form-group {
-                flex-direction: row;
             }
         }
 
@@ -283,92 +297,160 @@
             .add-stock-form button {
                 width: 100%;
             }
+
+            .container {
+                padding: 0;
+            }
+
+            .stock-card {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .stock-card {
+                padding: 1.25rem;
+            }
+
+            h1 {
+                font-size: 1.25rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header-controls">
-        <button id="themeToggle">🌓</button>
-        <a href="/logout" class="logout-btn">Logout</a>
-    </div>
+<div class="header-controls">
+    <button id="themeToggle">🌓</button>
+    <a href="/logout" class="logout-btn">Logout</a>
+</div>
 
-    <div class="logo">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="24" height="24" rx="12" fill="var(--text-color)"/>
-            <path d="M6 12.5L10 8.5L14 12.5L18 8.5" stroke="var(--bg-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M6 15.5L10 11.5L14 15.5L18 11.5" stroke="var(--bg-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-    </div>
+<div class="logo">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="12" fill="#000"/>
+        <path d="M6 12.5L10 8.5L14 12.5L18 8.5" stroke="white" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round"/>
+        <path d="M6 15.5L10 11.5L14 15.5L18 11.5" stroke="white" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round"/>
+    </svg>
+</div>
 
-    <div class="container">
-        <h1>Stock Tracker</h1>
+<div class="container">
+    <h1>Stock Tracker</h1>
 
-        <form class="add-stock-form">
-            <div class="form-group">
-                <input type="text" id="stockSymbol" placeholder="Enter stock symbol" required>
-                <button type="submit">Add Stock</button>
-            </div>
-        </form>
+    <form class="add-stock-form">
+        <div class="form-group">
+            <input type="text" id="stockSymbol" placeholder="Enter stock symbol" required>
+            <button type="submit">Add Stock</button>
+        </div>
+    </form>
 
-        <!-- Mobile View -->
-        <div class="stock-list" id="stockList"></div>
+    <!-- Mobile View -->
+    <div class="stock-list" id="stockList"></div>
 
-        <!-- Desktop View -->
-        <table class="stock-table">
-            <thead>
-                <tr>
-                    <th>Symbol</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>52W Low</th>
-                    <th>52W High</th>
-                    <th>50D Avg</th>
-                    <th>200D Avg</th>
-                    <th>1Y Target</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="stockTableBody"></tbody>
-        </table>
-    </div>
+    <!-- Desktop View -->
+    <table class="stock-table">
+        <thead>
+        <tr>
+            <th>Symbol</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>52W Low</th>
+            <th>52W High</th>
+            <th>50D Avg</th>
+            <th>200D Avg</th>
+            <th>1Y Target</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="stockTableBody"></tbody>
+    </table>
+</div>
 
-    <script>
-        const stocksData = {{ stocks | tojson | safe }};
+<script>
+    // Theme handling
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the theme toggle button
+        const themeToggle = document.getElementById('themeToggle');
 
-        // Theme management
-        function setTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-        }
+        // Initialize theme from localStorage or default to light
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
 
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            setTheme(savedTheme);
-            return savedTheme;
-        }
-
-        // Initialize theme
-        const currentTheme = loadTheme();
-
-        document.getElementById('themeToggle').addEventListener('click', function() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        // Add click event listener to theme toggle button
+        themeToggle.addEventListener('click', function () {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
             setTheme(newTheme);
         });
+    });
 
-        function formatPrice(price) {
-            return typeof price === 'number' ? `$${price.toFixed(2)}` : 'N/A';
+    function setTheme(theme) {
+        // Set theme on HTML element
+        document.documentElement.setAttribute('data-theme', theme);
+
+        // Save to localStorage
+        localStorage.setItem('theme', theme);
+
+        // Update button icon
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.innerHTML = theme === 'dark' ? '☀️' : '🌓';
+
+        // Update logo colors
+        const logo = document.querySelector('.logo svg');
+        if (logo) {
+            const rect = logo.querySelector('rect');
+            const paths = logo.querySelectorAll('path');
+
+            if (theme === 'dark') {
+                rect.setAttribute('fill', '#ffffff');
+                paths.forEach(path => path.setAttribute('stroke', '#000000'));
+            } else {
+                rect.setAttribute('fill', '#000000');
+                paths.forEach(path => path.setAttribute('stroke', '#ffffff'));
+            }
         }
+    }
 
-        function renderStocks(stocks) {
-            // Mobile view
-            const stockList = document.getElementById('stockList');
-            stockList.innerHTML = '';
+    // Theme handling
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        updateThemeToggleButton(theme);
+    }
 
-            stocks.forEach(stock => {
-                const card = document.createElement('div');
-                card.className = 'stock-card';
-                card.innerHTML = `
+    function updateThemeToggleButton(theme) {
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.textContent = theme === 'dark' ? '☀️' : '🌓';
+    }
+
+    function toggleTheme() {
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+    }
+
+    // Stock handling
+    const stocksData = {
+    {
+        stocks | tojson | safe
+    }
+    }
+    ;
+
+    function formatPrice(price) {
+        return typeof price === 'number' ? `$${price.toFixed(2)}` : 'N/A';
+    }
+
+    function renderStocks(stocks) {
+        // Mobile view
+        const stockList = document.getElementById('stockList');
+        stockList.innerHTML = '';
+
+        stocks.forEach(stock => {
+            const card = document.createElement('div');
+            card.className = 'stock-card';
+            card.innerHTML = `
                     <div class="card-header">
                         <span class="stock-symbol">
                             <a href="${stock.url}" target="_blank" class="stock-link">${stock.symbol}</a>
@@ -400,16 +482,16 @@
                         </div>
                     </div>
                 `;
-                stockList.appendChild(card);
-            });
+            stockList.appendChild(card);
+        });
 
-            // Desktop view
-            const tableBody = document.getElementById('stockTableBody');
-            tableBody.innerHTML = '';
+        // Desktop view
+        const tableBody = document.getElementById('stockTableBody');
+        tableBody.innerHTML = '';
 
-            stocks.forEach(stock => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
+        stocks.forEach(stock => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
                     <td><a href="${stock.url}" target="_blank" class="stock-link">${stock.symbol}</a></td>
                     <td>${stock.longName || 'N/A'}</td>
                     <td>${formatPrice(stock.currentPrice)}</td>
@@ -420,48 +502,44 @@
                     <td>${formatPrice(stock.oneYearTargetEstimate)}</td>
                     <td><button class="delete-btn" onclick="deleteStock('${stock.symbol}')">Delete</button></td>
                 `;
-                tableBody.appendChild(row);
-            });
-        }
+            tableBody.appendChild(row);
+        });
+    }
 
-        function addStock(symbol) {
-            fetch('/add_stock', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: `symbol=${symbol}`
-            })
+    function addStock(symbol) {
+        fetch('/add_stock', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `symbol=${symbol}`
+        })
             .then(response => response.json())
             .then(data => {
-                if(data.success) location.reload();
+                if (data.success) location.reload();
                 else alert(data.message);
             });
-        }
+    }
 
-        function deleteStock(symbol) {
-            fetch('/delete_stock', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: `symbol=${symbol}`
-            })
+    function deleteStock(symbol) {
+        fetch('/delete_stock', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `symbol=${symbol}`
+        })
             .then(response => response.json())
             .then(data => {
-                if(data.success) location.reload();
+                if (data.success) location.reload();
                 else alert(data.message);
             });
-        }
+    }
 
-        document.querySelector('.add-stock-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const symbol = document.getElementById('stockSymbol').value.trim();
-            if (symbol) addStock(symbol);
-        });
+    document.querySelector('.add-stock-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const symbol = document.getElementById('stockSymbol').value.trim();
+        if (symbol) addStock(symbol);
+    });
 
-        document.getElementById('themeToggle').addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-        });
-
-        // Initialize
-        renderStocks(stocksData);
-    </script>
+    // Initialize
+    renderStocks(stocksData);
+</script>
 </body>
 </html>
