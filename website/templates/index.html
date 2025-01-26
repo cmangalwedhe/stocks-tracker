@@ -431,12 +431,7 @@
     }
 
     // Stock handling
-    const stocksData = {
-    {
-        stocks | tojson | safe
-    }
-    }
-    ;
+    const stocksData = {{ stocks | tojson | safe }};
 
     function formatPrice(price) {
         return typeof price === 'number' ? `$${price.toFixed(2)}` : 'N/A';

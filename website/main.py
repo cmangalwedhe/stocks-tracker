@@ -25,7 +25,6 @@ def get_cached_timestamp():
 def get_all_stock_data(timestamp):
     """Fetch all stock data in parallel with caching"""
     stocks = current_user.get_stock_symbols()
-    print(stocks)
 
     def fetch_single_stock(symbol):
         try:
@@ -92,7 +91,6 @@ def delete_stock():
     stocks = current_user.get_stock_symbols()
 
     if symbol in stocks:
-        # STOCKS.remove(symbol)
         current_user.remove_stock(symbol)
         # Invalidate cache
         get_all_stock_data.cache_clear()

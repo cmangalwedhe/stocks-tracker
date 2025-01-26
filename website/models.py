@@ -30,7 +30,7 @@ class User(UserMixin, db.Model):
         db.session.commit()
 
     def get_stock_symbols(self):
-        return [stock.symbol for stock in self.stocks]
+        return sorted([stock.symbol for stock in self.stocks])
 
     def get_first_name(self):
         return self.first_name
