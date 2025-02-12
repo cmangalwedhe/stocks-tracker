@@ -5,11 +5,12 @@ matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 import pandas as pd
 import datetime as dt
-import urllib.request, json
-import os
 import numpy as np
 import tensorflow as tf
+from tensorflow.keras.layers import LSTM, Dense, Dropout
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_absolute_error
+
 import yfinance as yf
 
 ticker = "AAL"
@@ -28,97 +29,77 @@ for index, row in df.iterrows():
 
 df2.to_csv(file_to_save)
 
-plt.figure(figsize=(18,9))
-plt.plot(range(df2.shape[0]), (df2['Low']+df2['High'])/2.0)
-plt.xticks(range(0, df2.shape[0], 500), df2['Date'].loc[::500], rotation=45)
-plt.xlabel('Date', fontsize=18)
-plt.ylabel('Mid Price', fontsize=18)
-plt.show()
 
 high_prices = df.loc[:, 'High'].values
 low_prices = df.loc[:, 'Low'].values
 mid_prices = (high_prices + low_prices) / 2.0
 
-train_data = mid_prices[:730]
-test_data = mid_prices[730:]
 
-scaler = MinMaxScaler()
-train_data = train_data.reshape(-1, 1)
-test_data = test_data.reshape(-1, 1)
+scaler = MinMaxScaler(feature_range=(0,1))
+split = int(.40 * len(mid_prices))
+training_data = mid_prices[:split]
+testing_data = mid_prices[split:]
 
-smoothing_window_size = 20
+data_training_list = scaler.fit_transform(training_data)
 
-for di in range(0, 710, smoothing_window_size):
-    scaler.fit(train_data[di:di + smoothing_window_size, :])
-    train_data[di:di + smoothing_window_size, :] = scaler.transform(train_data[di:di + smoothing_window_size, :])
+x_train = []
+y_train = []
 
-scaler.fit(train_data[di + smoothing_window_size:, :])
-train_data[di + smoothing_window_size:, :] = scaler.transform(train_data[di + smoothing_window_size:, :])
+for i in range(0, data_training_list.shape[0] - 100):
+    x_train.append(data_training_list[i:i+100])
+    y_train.append(data_training_list[i, 0])
 
-train_data = train_data.reshape(-1)
-test_data = scaler.transform(test_data).reshape(-1)
 
-EMA = 0.0
-gamma = 0.1
+x_train, y_train = np.array(x_train), np.array(y_train)
 
-for ti in range(730):
-    EMA = gamma * train_data[ti] + (1 - gamma) * EMA
-    train_data[ti] = EMA
+model = tf.keras.Sequential()
+model.add(LSTM(units=50, activation='relu', return_sequences=True, input_shape=(x_train.shape[1], 1)))
+model.add(Dropout(0.2))
 
-all_mid_data = np.concatenate([train_data, test_data], axis=0)
+model.add(LSTM(units=60, activation='relu', return_sequences=True))
+model.add(Dropout(0.3))
 
-window_size = 100
-N = train_data.size
-std_avg_predictions = []
-std_avg_x = []
-mse_errors = []
+model.add(LSTM(units=80, activation='relu', return_sequences=True))
+model.add(Dropout(0.4))
 
-for pred_idx in range(window_size, N):
-    if pred_idx >= N:
-        date = dt.datetime.strptime(k, '%Y-%m-%d').date() + dt.timedelta(days=1)
-    else:
-        date = df2.loc[pred_idx, 'Date']
+model.add(LSTM(units=120, activation='relu'))
+model.add(Dropout(0.5))
 
-    std_avg_predictions.append(np.mean(train_data[pred_idx - window_size:pred_idx]))
-    mse_errors.append((std_avg_predictions[-1] - train_data[pred_idx] ** 2))
-    std_avg_x.append(date)
+model.add(Dense(units=1))
 
-print(f"MSE error for standard averaging: {0.5 * np.mean(mse_errors)}")
-print(len(std_avg_predictions))
+model.compile(optimizer='adam', loss='mean_squared_error', metrics=[tf.keras.metrics.MeanAbsoluteError()])
+model.fit(x_train, y_train, epochs=100)
 
-"""plt.figure(figsize = (18,9))
-plt.plot(range(df.shape[0]), all_mid_data, color='b', label='True')
-plt.plot(range(window_size, N), std_avg_predictions, color='orange', label='Prediction')
-plt.xlabel('Date')
-plt.ylabel('Mid Price')
-plt.legend(fontsize=18)
-plt.show()"""
+past_100_days = pd.DataFrame(training_data[-100:])
+test_df = pd.DataFrame(testing_data)
+final_df = past_100_days._append(test_df, ignore_index=True)
 
-window_size = 100
-N = train_data.size
+input_data = scaler.fit_transform(final_df)
 
-run_avg_predictions = []
-run_avg_x = []
+x_test = []
+y_test = []
 
-mse_errors = []
+for i in range(0, input_data.shape[0]-100):
+    x_test.append(input_data[i:i+100])
+    y_test.append(input_data[i, 0])
 
-running_mean = 0.0
-run_avg_predictions.append(running_mean)
+x_test, y_test = np.array(x_test), np.array(y_test)
+y_pred = model.predict(x_test)
 
-decay = 0.5
+scaler.scale_
+scale_factor = 1/0.00041967
+y_pred *= scale_factor
+y_test *= scale_factor
 
-for pred_idx in range(1, N):
-    running_mean = running_mean * decay + (1.0 - decay) * train_data[pred_idx - 1]
-    run_avg_predictions.append(running_mean)
-    mse_errors.append((run_avg_predictions[-1] - train_data[pred_idx]) ** 2)
-    run_avg_x.append(date)
-
-print(f'MSE error for EMA averaging: {0.5 * np.mean(mse_errors)}')
-
-plt.figure(figsize=(18,9))
-plt.plot(range(df2.shape[0]), all_mid_data, color='b', label='True')
-plt.plot(range(0,N), run_avg_predictions, color='orange', label='Prediction')
-plt.xlabel("Date")
-plt.ylabel("Prices")
-plt.legend(fontsize=18)
+plt.figure(figsize = (12,6))
+plt.plot(y_test, 'b', label = "Original Price")
+plt.plot(y_pred, 'r', label = "Predicted Price")
+plt.xlabel('Time')
+plt.ylabel('Price')
+plt.legend()
+plt.grid(True)
 plt.show()
+
+mae = mean_absolute_error(y_test, y_pred)
+mae_percentage = (mae / np.mean(y_test)) * 100
+print(f"Mean Absolute Error on test set: {mae_percentage:.2f}%")
