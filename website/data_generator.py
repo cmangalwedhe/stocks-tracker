@@ -1,6 +1,5 @@
 from pandas_datareader import data
 import matplotlib
-
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -13,13 +12,16 @@ from sklearn.metrics import mean_absolute_error
 
 import yfinance as yf
 
+# loading data from yahoo finance and storing in a pandas dataframe which is easy to read to non-programmers
 ticker = "AAL"
 file_to_save = f"stock_market_data_{ticker}_yf.csv"
+
 
 df = yf.download(ticker)
 df.to_csv("stock_market_data_1.csv")
 df = df.iloc[::-1]
 df2 = pd.DataFrame(columns=['Date', 'Low', 'High', 'Close', 'Open'])
+
 
 for index, row in df.iterrows():
     date = str(index)[:str(index).find(" ")]
@@ -27,24 +29,32 @@ for index, row in df.iterrows():
     df2.loc[-1, :] = [date_info.date(), row.iloc[2], row.iloc[1], row.iloc[0], row.iloc[3]]
     df2.index += 1
 
+
 df2.to_csv(file_to_save)
 
 
+# calculate multiple prices and use as different parameters in deciding which is most accurate
 high_prices = df.loc[:, 'High'].values
 low_prices = df.loc[:, 'Low'].values
+close_prices = df.loc[:, 'Close'].values
 mid_prices = (high_prices + low_prices) / 2.0
 
 
+# split data into training and testing lists and
 scaler = MinMaxScaler(feature_range=(0,1))
-split = int(.40 * len(mid_prices))
-training_data = mid_prices[:split]
-testing_data = mid_prices[split:]
+split = int(.45 * len(close_prices))
+training_data = close_prices[:split]
+testing_data = close_prices[split:]
 
+
+# scale data using mean and standard deviation (helps to standardize data)
 data_training_list = scaler.fit_transform(training_data)
+
 
 x_train = []
 y_train = []
 
+# create different roll-outs of data for model training (batches of 100 days) and
 for i in range(0, data_training_list.shape[0] - 100):
     x_train.append(data_training_list[i:i+100])
     y_train.append(data_training_list[i, 0])
@@ -86,8 +96,7 @@ for i in range(0, input_data.shape[0]-100):
 x_test, y_test = np.array(x_test), np.array(y_test)
 y_pred = model.predict(x_test)
 
-scaler.scale_
-scale_factor = 1/0.00041967
+scale_factor = 1/scaler.scale_[0]
 y_pred *= scale_factor
 y_test *= scale_factor
 
