@@ -68,7 +68,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px; /* Increased from 1200px */
             margin: 0 auto;
             padding: 0 1rem;
         }
@@ -225,11 +225,34 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
         .delete-btn:hover {
             background: var(--background-color);
             transform: translateY(-1px);
+        }
+
+        .view-btn {
+            background: var(--button-background);
+            color: var(--button-text);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .view-btn:hover {
+            background: var(--button-hover);
+            transform: translateY(-1px);
+        }
+
+        .mr-2 {
+            margin-right: 0.5rem;
         }
 
         .metrics {
@@ -255,6 +278,12 @@
             color: var(--text-color);
         }
 
+        .stock-table-container {
+            width: 100%;
+            overflow-x: auto;
+            padding: 0 0 20px 0;
+        }
+
         .stock-table {
             width: 100%;
             background: var(--card-background);
@@ -262,15 +291,28 @@
             box-shadow: 0 4px 24px var(--card-shadow);
             overflow: hidden;
             transition: background-color 0.3s ease;
+            -webkit-overflow-scrolling: touch;
+            table-layout: fixed; /* For better column control */
+            border-collapse: collapse; /* Added for connected borders */
         }
 
         .stock-table th,
         .stock-table td {
             padding: 1.5rem;
             text-align: left;
-            border-bottom: 1px solid var(--border-color);
             font-size: 0.875rem;
             color: var(--text-color);
+            white-space: nowrap;
+            position: relative;
+        }
+
+        /* This is the key modification: Full-width row borders */
+        .stock-table tr {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stock-table tr:last-child {
+            border-bottom: none;
         }
 
         .stock-table th {
@@ -279,6 +321,36 @@
             background: var(--card-background);
         }
 
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            min-width: 180px;
+        }
+
+        /* Column widths */
+        .stock-table th:nth-child(1),
+        .stock-table td:nth-child(1) { width: 8%; } /* Symbol */
+
+        .stock-table th:nth-child(2),
+        .stock-table td:nth-child(2) { width: 16%; } /* Name */
+
+        .stock-table th:nth-child(3),
+        .stock-table td:nth-child(3) { width: 8%; } /* Price */
+
+        .stock-table th:nth-child(4),
+        .stock-table td:nth-child(4),
+        .stock-table th:nth-child(5),
+        .stock-table td:nth-child(5),
+        .stock-table th:nth-child(6),
+        .stock-table td:nth-child(6),
+        .stock-table th:nth-child(7),
+        .stock-table td:nth-child(7),
+        .stock-table th:nth-child(8),
+        .stock-table td:nth-child(8) { width: 8%; } /* Various metrics */
+
+        .stock-table th:nth-child(9),
+        .stock-table td:nth-child(9) { width: 20%; } /* Actions */
+
         @media (min-width: 768px) {
             .stock-list {
                 display: none;
@@ -286,7 +358,7 @@
         }
 
         @media (max-width: 767px) {
-            .stock-table {
+            .stock-table-container {
                 display: none;
             }
 
@@ -305,6 +377,17 @@
             .stock-card {
                 padding: 1.5rem;
                 border-radius: 16px;
+            }
+
+            .card-header div {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .view-btn, .delete-btn {
+                width: 100%;
+                text-align: center;
             }
         }
 
@@ -348,23 +431,25 @@
     <!-- Mobile View -->
     <div class="stock-list" id="stockList"></div>
 
-    <!-- Desktop View -->
-    <table class="stock-table">
-        <thead>
-        <tr>
-            <th>Symbol</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>52W Low</th>
-            <th>52W High</th>
-            <th>50D Avg</th>
-            <th>200D Avg</th>
-            <th>1Y Target</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody id="stockTableBody"></tbody>
-    </table>
+    <!-- Desktop View - Now wrapped in container for better scrolling -->
+    <div class="stock-table-container">
+        <table class="stock-table">
+            <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>52W Low</th>
+                <th>52W High</th>
+                <th>50D Avg</th>
+                <th>200D Avg</th>
+                <th>1Y Target</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="stockTableBody"></tbody>
+        </table>
+    </div>
 </div>
 
 <script>
@@ -412,26 +497,64 @@
         }
     }
 
-    // Theme handling
-    function setTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-        updateThemeToggleButton(theme);
-    }
-
-    function updateThemeToggleButton(theme) {
-        const themeToggle = document.getElementById('themeToggle');
-        themeToggle.textContent = theme === 'dark' ? '☀️' : '🌓';
-    }
-
-    function toggleTheme() {
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        setTheme(newTheme);
-    }
-
-    // Stock handling
-    const stocksData = {{ stocks | tojson | safe }};
+    // Sample stock data (for demonstration)
+    const stocksData = [
+        {
+            symbol: 'AAPL',
+            longName: 'Apple Inc.',
+            currentPrice: 220.84,
+            fiftyTwoWeekLow: 164.08,
+            fiftyTwoWeekHigh: 260.10,
+            fiftyDayAverage: 238.21,
+            twoHundredDayAverage: 227.27,
+            oneYearTargetEstimate: 252.80,
+            url: 'https://finance.yahoo.com/quote/AAPL'
+        },
+        {
+            symbol: 'DDOG',
+            longName: 'Datadog, Inc.',
+            currentPrice: 101.96,
+            fiftyTwoWeekLow: 98.80,
+            fiftyTwoWeekHigh: 170.08,
+            fiftyDayAverage: 134.84,
+            twoHundredDayAverage: 127.31,
+            oneYearTargetEstimate: 159.48,
+            url: 'https://finance.yahoo.com/quote/DDOG'
+        },
+        {
+            symbol: 'NET',
+            longName: 'Cloudflare, Inc.',
+            currentPrice: 120.07,
+            fiftyTwoWeekLow: 66.24,
+            fiftyTwoWeekHigh: 177.37,
+            fiftyDayAverage: 134.64,
+            twoHundredDayAverage: 97.96,
+            oneYearTargetEstimate: 144.02,
+            url: 'https://finance.yahoo.com/quote/NET'
+        },
+        {
+            symbol: 'NVDA',
+            longName: 'NVIDIA Corporation',
+            currentPrice: 108.76,
+            fiftyTwoWeekLow: 75.61,
+            fiftyTwoWeekHigh: 153.13,
+            fiftyDayAverage: 131.15,
+            twoHundredDayAverage: 127.33,
+            oneYearTargetEstimate: 172.36,
+            url: 'https://finance.yahoo.com/quote/NVDA'
+        },
+        {
+            symbol: 'VTSAX',
+            longName: 'Vanguard Total Stock Mkt Idx Adm',
+            currentPrice: null,
+            fiftyTwoWeekLow: 119.39,
+            fiftyTwoWeekHigh: 147.54,
+            fiftyDayAverage: 143.44,
+            twoHundredDayAverage: 137.60,
+            oneYearTargetEstimate: null,
+            url: 'https://finance.yahoo.com/quote/VTSAX'
+        }
+    ];
 
     function formatPrice(price) {
         return typeof price === 'number' ? `$${price.toFixed(2)}` : 'N/A';
@@ -450,7 +573,10 @@
                         <span class="stock-symbol">
                             <a href="${stock.url}" target="_blank" class="stock-link">${stock.symbol}</a>
                         </span>
-                        <button class="delete-btn" onclick="deleteStock('${stock.symbol}')">Delete</button>
+                        <div>
+                            <button class="view-btn" onclick="viewPrediction('${stock.symbol}')">View Prediction</button>
+                            <button class="delete-btn" onclick="deleteStock('${stock.symbol}')">Delete</button>
+                        </div>
                     </div>
                     <div class="stock-name">${stock.longName || 'N/A'}</div>
                     <div class="stock-price">${formatPrice(stock.currentPrice)}</div>
@@ -495,7 +621,10 @@
                     <td>${formatPrice(stock.fiftyDayAverage)}</td>
                     <td>${formatPrice(stock.twoHundredDayAverage)}</td>
                     <td>${formatPrice(stock.oneYearTargetEstimate)}</td>
-                    <td><button class="delete-btn" onclick="deleteStock('${stock.symbol}')">Delete</button></td>
+                    <td class="button-group">
+                        <button class="view-btn" onclick="viewPrediction('${stock.symbol}')">View Prediction</button>
+                        <button class="delete-btn" onclick="deleteStock('${stock.symbol}')">Delete</button>
+                    </td>
                 `;
             tableBody.appendChild(row);
         });
@@ -527,13 +656,18 @@
             });
     }
 
+    function viewPrediction(symbol) {
+        // Navigate to prediction page
+        window.location.href = `/prediction/${symbol}`;
+    }
+
     document.querySelector('.add-stock-form').addEventListener('submit', function (e) {
         e.preventDefault();
         const symbol = document.getElementById('stockSymbol').value.trim();
         if (symbol) addStock(symbol);
     });
 
-    // Initialize
+    // Initialize with sample data
     renderStocks(stocksData);
 </script>
 </body>
