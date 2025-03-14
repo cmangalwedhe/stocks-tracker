@@ -498,63 +498,7 @@
     }
 
     // Sample stock data (for demonstration)
-    const stocksData = [
-        {
-            symbol: 'AAPL',
-            longName: 'Apple Inc.',
-            currentPrice: 220.84,
-            fiftyTwoWeekLow: 164.08,
-            fiftyTwoWeekHigh: 260.10,
-            fiftyDayAverage: 238.21,
-            twoHundredDayAverage: 227.27,
-            oneYearTargetEstimate: 252.80,
-            url: 'https://finance.yahoo.com/quote/AAPL'
-        },
-        {
-            symbol: 'DDOG',
-            longName: 'Datadog, Inc.',
-            currentPrice: 101.96,
-            fiftyTwoWeekLow: 98.80,
-            fiftyTwoWeekHigh: 170.08,
-            fiftyDayAverage: 134.84,
-            twoHundredDayAverage: 127.31,
-            oneYearTargetEstimate: 159.48,
-            url: 'https://finance.yahoo.com/quote/DDOG'
-        },
-        {
-            symbol: 'NET',
-            longName: 'Cloudflare, Inc.',
-            currentPrice: 120.07,
-            fiftyTwoWeekLow: 66.24,
-            fiftyTwoWeekHigh: 177.37,
-            fiftyDayAverage: 134.64,
-            twoHundredDayAverage: 97.96,
-            oneYearTargetEstimate: 144.02,
-            url: 'https://finance.yahoo.com/quote/NET'
-        },
-        {
-            symbol: 'NVDA',
-            longName: 'NVIDIA Corporation',
-            currentPrice: 108.76,
-            fiftyTwoWeekLow: 75.61,
-            fiftyTwoWeekHigh: 153.13,
-            fiftyDayAverage: 131.15,
-            twoHundredDayAverage: 127.33,
-            oneYearTargetEstimate: 172.36,
-            url: 'https://finance.yahoo.com/quote/NVDA'
-        },
-        {
-            symbol: 'VTSAX',
-            longName: 'Vanguard Total Stock Mkt Idx Adm',
-            currentPrice: null,
-            fiftyTwoWeekLow: 119.39,
-            fiftyTwoWeekHigh: 147.54,
-            fiftyDayAverage: 143.44,
-            twoHundredDayAverage: 137.60,
-            oneYearTargetEstimate: null,
-            url: 'https://finance.yahoo.com/quote/VTSAX'
-        }
-    ];
+    const stocksData = {{ stocks | tojson | safe }};
 
     function formatPrice(price) {
         return typeof price === 'number' ? `$${price.toFixed(2)}` : 'N/A';
@@ -658,6 +602,13 @@
 
     function viewPrediction(symbol) {
         // Navigate to prediction page
+        fetch(`/prediction/${symbol}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `symbol=${symbol}`
+        })
+            .then(response => response.json());
+
         window.location.href = `/prediction/${symbol}`;
     }
 

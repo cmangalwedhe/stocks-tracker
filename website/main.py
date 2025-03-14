@@ -5,6 +5,7 @@ import yfinance as yf
 import time
 from functools import lru_cache
 from models import User
+import lstm_model
 
 # Store stocks list in memory
 STOCKS = ['agx', 'alab', 'arm', 'asml', 'aspn', 'cava', 'crwd', 'deck', 'dell', 'dkng',
@@ -102,6 +103,17 @@ def delete_stock():
 @main.route('/')
 def index():
     return render_template('profile.html')
+
+
+@main.route('/prediction/<ticker>')
+def prediction(ticker):
+    plot_and_predictions = lstm_model.predict_stock_prices(ticker, days_to_predict=5)
+    plot = plot_and_predictions[0]
+    predictions = plot_and_predictions[1]
+
+    return render_template("prediction.html", days=[i for i in range(1, len(predictions)+1)],
+                                                                chart_image=plot,
+                                                                prediction=predictions)
 
 
 @main.route('/profile')

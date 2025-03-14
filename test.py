@@ -6,6 +6,7 @@ import time
 
 app = Flask(__name__)
 
+
 # Store stocks list in memory
 STOCKS = ['agx', 'alab', 'arm', 'asml', 'aspn', 'cava', 'crwd', 'deck', 'dell', 'dkng',
           'duol', 'elf', 'estc', 'four', 'glbe', 'hims', 'hood', 'klac', 'mdb', 'meli',
@@ -96,10 +97,6 @@ def delete_stock():
         # Invalidate cache
         get_all_stock_data.cache_clear()
         return jsonify({'success': True, 'message': 'Stock removed successfully'})
-
-    return jsonify({'success': False, 'message': 'Stock not found'})
-
-
 
 
 if __name__ == '__main__':

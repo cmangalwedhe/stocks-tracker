@@ -1,3 +1,5 @@
+import base64
+
 import numpy as np
 import pandas as pd
 import yfinance as yf
@@ -8,8 +10,9 @@ from tensorflow.keras.layers import LSTM, Dense, Dropout
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping
 import matplotlib
-matplotlib.use("TkAgg")
+matplotlib.use("agg")
 import matplotlib.pyplot as plt
+from io import BytesIO
 
 class StockPriceLSTM:
     def __init__(self, ticker, sequence_length=60):
@@ -221,8 +224,15 @@ class StockPriceLSTM:
         plt.ylabel('Price ($)')
         plt.legend()
         plt.grid(True)
-        plt.show()
 
+        buffer = BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+
+        encoded_image = base64.b64encode(buffer.read()).decode('utf-8')
+        plt.close()
+
+        return encoded_image
 
 def predict_stock_prices(ticker, days_to_predict=30, sequence_length=60):
     """
@@ -256,22 +266,9 @@ def predict_stock_prices(ticker, days_to_predict=30, sequence_length=60):
         predictions = model.predict_future(days=days_to_predict)
 
         # Plot results
-        model.plot_predictions(predictions)
-
-        return predictions
+        plot = model.plot_predictions(predictions)
+        return plot, predictions
 
     except Exception as e:
         print(f"Error occurred: {str(e)}")
         return None
-
-
-if __name__ == "__main__":
-    # Example usage
-    ticker = input("Enter stock ticker (e.g., AAPL): ")
-    days = int(input("Enter number of days to predict: "))
-    predictions = predict_stock_prices(ticker, days_to_predict=days)
-
-    if predictions is not None:
-        print(f"\nPredicted prices for the next {days} days:")
-        for i, price in enumerate(predictions, 1):
-            print(f"Day {i}: ${price:.2f}")

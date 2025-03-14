@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price Prediction</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --background-color: #f5f5f7;
+            --text-color: #1d1d1f;
+            --card-background: #ffffff;
+            --border-color: #e5e7eb;
+            --secondary-text: #6b7280;
+            --button-background: #000000;
+            --button-text: #ffffff;
+            --button-hover: #333333;
+            --card-shadow: rgba(0, 0, 0, 0.05);
+            --accent-color: #0066cc;
+            --success-color: #34c759;
+            --danger-color: #ff3b30;
+        }
+
+        [data-theme="dark"] {
+            --background-color: #1a1a1a;
+            --text-color: #ffffff;
+            --card-background: #2d2d2d;
+            --border-color: #404040;
+            --secondary-text: #a0a0a0;
+            --button-background: #ffffff;
+            --button-text: #000000;
+            --button-hover: #e5e5e5;
+            --card-shadow: rgba(0, 0, 0, 0.2);
+            --accent-color: #0a84ff;
+            --success-color: #30d158;
+            --danger-color: #ff453a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 1rem;
+            padding-top: 4rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            margin: 1.5rem auto;
+        }
+
+        .logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo svg rect {
+            fill: var(--button-background);
+        }
+
+        .logo svg path {
+            stroke: var(--button-text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--text-color);
+            letter-spacing: -0.02em;
+        }
+
+        .header-controls {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 0.75rem 1rem;
+            background: var(--background-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .back-btn, #themeToggle, .logout-btn {
+            background: var(--button-background);
+            color: var(--button-text);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            height: 36px;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn:hover, #themeToggle:hover, .logout-btn:hover {
+            background: var(--button-hover);
+            transform: translateY(-1px);
+        }
+
+        .prediction-card {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 4px 24px var(--card-shadow);
+            margin-bottom: 2rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .chart-container {
+            width: 100%;
+            margin-bottom: 2rem;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .chart-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .prediction-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--card-background);
+            box-shadow: 0 4px 16px var(--card-shadow);
+        }
+
+        .prediction-table th,
+        .prediction-table td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .prediction-table th {
+            background-color: var(--card-background);
+            font-weight: 600;
+            color: var(--secondary-text);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .prediction-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .day-cell {
+            font-weight: 500;
+        }
+
+        .price-cell {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .change-cell {
+            font-weight: 500;
+        }
+
+        .positive-change {
+            color: var(--success-color);
+        }
+
+        .negative-change {
+            color: var(--danger-color);
+        }
+
+        .prediction-summary {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: var(--card-background);
+            border-radius: 16px;
+            box-shadow: 0 4px 16px var(--card-shadow);
+        }
+
+        .summary-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .summary-content {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--secondary-text);
+        }
+
+        .ticker-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+        }
+
+        .ticker-name {
+            font-weight: 500;
+            color: var(--secondary-text);
+        }
+
+        .prediction-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .prediction-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-right: auto;
+        }
+
+        .prediction-meta {
+            font-size: 0.875rem;
+            color: var(--secondary-text);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .prediction-card {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+
+            .prediction-table th,
+            .prediction-table td {
+                padding: 0.75rem 1rem;
+            }
+
+            .prediction-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .prediction-title {
+                margin-right: 0;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .prediction-card {
+                padding: 1.25rem;
+            }
+
+            .chart-container {
+                margin-bottom: 1.5rem;
+            }
+
+            .prediction-table {
+                font-size: 0.875rem;
+            }
+
+            .prediction-table th,
+            .prediction-table td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .prediction-summary {
+                padding: 1.25rem;
+            }
+
+            .summary-title {
+                font-size: 1.125rem;
+            }
+
+            .summary-content {
+                font-size: 0.9375rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-controls">
+        <div class="header-left">
+            <a href="/profile" class="back-btn">
+                ← Back
+            </a>
+        </div>
+        <div class="header-right">
+            <button id="themeToggle">🌓</button>
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+    </div>
+
+    <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="24" height="24" rx="12" fill="#000"/>
+            <path d="M6 12.5L10 8.5L14 12.5L18 8.5" stroke="white" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+            <path d="M6 15.5L10 11.5L14 15.5L18 11.5" stroke="white" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+        </svg>
+    </div>
+
+    <div class="container">
+        <h1>Stock Price Prediction</h1>
+
+        <div class="prediction-card">
+            <div class="prediction-header">
+                <div class="prediction-title">
+                    <span class="ticker-badge">{{ ticker_symbol }}</span>
+                    <span class="ticker-name">{{ ticker_name }}</span>
+                </div>
+                <div class="prediction-meta">
+                    Prediction generated on {{ current_date }}
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <img src="data:image/png;base64,{{ chart_image }}" alt="Stock price prediction chart">
+            </div>
+
+            <table class="prediction-table">
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Predicted Price</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(days|length) %}
+                        <tr>
+                            <td class="day-cell">Day {{ days[i] }}</td>
+                            <td class="price-cell">${{ prediction[i]|round(2) }}</td>
+                            {% if i == 0 %}
+                                <td class="change-cell">-</td>
+                            {% else %}
+                                {% set change = ((prediction[i] - prediction[i-1]) / prediction[i-1] * 100)|round(2) %}
+                                {% if change >= 0 %}
+                                    <td class="change-cell positive-change">+{{ change }}%</td>
+                                {% else %}
+                                    <td class="change-cell negative-change">{{ change }}%</td>
+                                {% endif %}
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="prediction-summary">
+                <h3 class="summary-title">Prediction Summary</h3>
+                <p class="summary-content">
+                    This prediction is based on historical data analysis using LSTM (Long Short-Term Memory) neural networks.
+                    The model analyzes patterns in stock price movements to forecast potential future prices.
+                    Please note that these predictions are for informational purposes only and should not be considered as financial advice.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme handling
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the theme toggle button
+            const themeToggle = document.getElementById('themeToggle');
+
+            // Initialize theme from localStorage or default to light
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+
+            // Add click event listener to theme toggle button
+            themeToggle.addEventListener('click', function () {
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                setTheme(newTheme);
+            });
+        });
+
+        function setTheme(theme) {
+            // Set theme on HTML element
+            document.documentElement.setAttribute('data-theme', theme);
+
+            // Save to localStorage
+            localStorage.setItem('theme', theme);
+
+            // Update button icon
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.innerHTML = theme === 'dark' ? '☀️' : '🌓';
+
+            // Update logo colors
+            const logo = document.querySelector('.logo svg');
+            if (logo) {
+                const rect = logo.querySelector('rect');
+                const paths = logo.querySelectorAll('path');
+
+                if (theme === 'dark') {
+                    rect.setAttribute('fill', '#ffffff');
+                    paths.forEach(path => path.setAttribute('stroke', '#000000'));
+                } else {
+                    rect.setAttribute('fill', '#000000');
+                    paths.forEach(path => path.setAttribute('stroke', '#ffffff'));
+                }
+            }
+        }
+    </script>
+</body>
+</html>
