@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | Stock Trading</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --background-color: #f5f5f7;
+            --text-color: #1d1d1f;
+            --card-background: #ffffff;
+            --border-color: #e5e7eb;
+            --secondary-text: #6b7280;
+            --button-background: #000000;
+            --button-text: #ffffff;
+            --button-hover: #333333;
+            --card-shadow: rgba(0, 0, 0, 0.05);
+            --accent-color: #0066cc;
+        }
+
+        [data-theme="dark"] {
+            --background-color: #1a1a1a;
+            --text-color: #ffffff;
+            --card-background: #2d2d2d;
+            --border-color: #404040;
+            --secondary-text: #a0a0a0;
+            --button-background: #ffffff;
+            --button-text: #000000;
+            --button-hover: #e5e5e5;
+            --card-shadow: rgba(0, 0, 0, 0.2);
+            --accent-color: #0a84ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 1rem;
+            padding-top: 4rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            margin: 1.5rem auto;
+        }
+
+        .logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo svg rect {
+            fill: var(--button-background);
+        }
+
+        .logo svg path {
+            stroke: var(--button-text);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--text-color);
+            letter-spacing: -0.02em;
+        }
+
+        .header-controls {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 0.75rem 1rem;
+            background: var(--background-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .back-btn, #themeToggle {
+            background: var(--button-background);
+            color: var(--button-text);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            height: 36px;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn:hover, #themeToggle:hover {
+            background: var(--button-hover);
+            transform: translateY(-1px);
+        }
+
+        .privacy-card {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 4px 24px var(--card-shadow);
+            margin-bottom: 2rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .privacy-section {
+            margin-bottom: 2rem;
+        }
+
+        .privacy-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .section-content {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--secondary-text);
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+
+        .section-content ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .last-updated {
+            font-size: 0.875rem;
+            color: var(--secondary-text);
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .privacy-card {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .privacy-card {
+                padding: 1.25rem;
+            }
+
+            .section-title {
+                font-size: 1.125rem;
+            }
+
+            .section-content {
+                font-size: 0.9375rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-controls">
+        <div class="header-left">
+            <a href="/" class="back-btn">
+                ← Home
+            </a>
+        </div>
+        <div class="header-right">
+            <button id="themeToggle">🌓</button>
+        </div>
+    </div>
+
+    <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="24" height="24" rx="12" fill="#000"/>
+            <path d="M6 12.5L10 8.5L14 12.5L18 8.5" stroke="white" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+            <path d="M6 15.5L10 11.5L14 15.5L18 11.5" stroke="white" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+        </svg>
+    </div>
+
+    <div class="container">
+        <h1>Privacy Policy</h1>
+
+        <div class="privacy-card">
+            <div class="privacy-section">
+                <h2 class="section-title">Introduction</h2>
+                <div class="section-content">
+                    <p>
+                        Welcome to our Privacy Policy. This document explains how we collect, use, and protect your personal information when you use our stock trading platform and services.
+                    </p>
+                    <p>
+                        We respect your privacy and are committed to protecting your personal data. This privacy policy will inform you about how we look after your personal data when you visit our website and tell you about your privacy rights and how the law protects you.
+                    </p>
+                </div>
+            </div>
+
+            <div class="privacy-section">
+                <h2 class="section-title">Information We Collect</h2>
+                <div class="section-content">
+                    <p>We may collect the following types of information:</p>
+                    <ul>
+                        <li><strong>Personal Identification Information:</strong> Name, email address, phone number, and other contact details you provide when creating an account.</li>
+                        <li><strong>Financial Information:</strong> Information necessary for trading activities, such as account balances and transaction history.</li>
+                        <li><strong>Technical Data:</strong> IP address, browser type, device information, and other technology identifiers when you access our platform.</li>
+                        <li><strong>Usage Data:</strong> Information about how you use our website, products, and services, including click patterns and feature usage.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="privacy-section">
+                <h2 class="section-title">How We Use Your Information</h2>
+                <div class="section-content">
+                    <p>We use your information for the following purposes:</p>
+                    <ul>
+                        <li>To provide and maintain our service, including verifying your identity and processing transactions.</li>
+                        <li>To notify you about changes to our service and important updates.</li>
+                        <li>To provide customer support and respond to your inquiries.</li>
+                        <li>To analyze usage patterns and improve our platform's functionality and user experience.</li>
+                        <li>To detect, prevent, and address technical issues, fraud, or other illegal activities.</li>
+                        <li>To comply with legal obligations and regulatory requirements related to financial services.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="privacy-section">
+                <h2 class="section-title">Data Security</h2>
+                <div class="section-content">
+                    <p>
+                        We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. These measures include encryption, secure socket layer technology, and regular security assessments.
+                    </p>
+                    <p>
+                        While we strive to use commercially acceptable means to protect your personal data, we cannot guarantee its absolute security. Any transmission of personal information is at your own risk.
+                    </p>
+                </div>
+            </div>
+
+            <div class="privacy-section">
+                <h2 class="section-title">Cookies and Tracking</h2>
+                <div class="section-content">
+                    <p>
+                        We use cookies and similar tracking technologies to track activity on our platform and hold certain information. Cookies are files with small amount of data that may include an anonymous unique identifier.
+                    </p>
+                    <p>
+                        You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our service.
+                    </p>
+                </div>
+            </div>
+
+            <div class="privacy-section">
+                <h2 class="section-title">Third-Party Disclosure</h2>
+                <div class="section-content">
+                    <p>
+                        We may share your information with third parties in the following circumstances:
+                    </p>
+                    <ul>
+                        <li>With service providers who perform services on our behalf, such as payment processors, data analysis, and customer service.</li>
+                        <li>With business partners who offer services jointly with us.</li>
+                        <li>To comply with legal obligations, such as responding to court orders or legal processes.</li>
+                        <li>To protect and defend our rights or property, including preventing fraud and reducing credit risk.</li>
+                    </ul>
+                    <p>
+                        We do not sell your personal information to third parties.
+                    </p>
+                </div>
+            </div>
+
+            <div class="privacy-section">
+                <h2 class="section-title">Your Data Rights</h2>
+                <div class="section-content">
+                    <p>
+                        Depending on your location, you may have certain rights regarding your personal data, including:
+                    </p>
+                    <ul>
+                        <li>The right to access the personal data we hold about you.</li>
+                        <li>The right to request correction of inaccurate personal data.</li>
+                        <li>The right to request erasure of your personal data under certain conditions.</li>
+                        <li>The right to restrict or object to processing of your personal data.</li>
+                        <li>The right to data portability, allowing you to obtain a copy of your data.</li>
+                    </ul>
+                    <p>
+                        To exercise these rights, please contact us using the details provided in the "Contact Us" section.
+                    </p>
+                </div>
+            </div>
+
+            <div class="privacy-section">
+                <h2 class="section-title">Children's Privacy</h2>
+                <div class="section-content">
+                    <p>
+                        Our services are not intended for use by individuals under the age of 18. We do not knowingly collect personal information from children. If we become aware that we have collected personal data from a child without verification of parental consent, we will take steps to remove that information from our servers.
+                    </p>
+                </div>
+            </div>
+
+            <div class="privacy-section">
+                <h2 class="section-title">Changes to This Privacy Policy</h2>
+                <div class="section-content">
+                    <p>
+                        We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date. You are advised to review this Privacy Policy periodically for any changes.
+                    </p>
+                </div>
+            </div>
+
+            <p class="last-updated">Last Updated: March 15, 2025</p>
+        </div>
+    </div>
+
+    <script>
+        // Theme handling
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the theme toggle button
+            const themeToggle = document.getElementById('themeToggle');
+
+            // Initialize theme from localStorage or default to light
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+
+            // Add click event listener to theme toggle button
+            themeToggle.addEventListener('click', function () {
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                setTheme(newTheme);
+            });
+        });
+
+        function setTheme(theme) {
+            // Set theme on HTML element
+            document.documentElement.setAttribute('data-theme', theme);
+
+            // Save to localStorage
+            localStorage.setItem('theme', theme);
+
+            // Update button icon
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.innerHTML = theme === 'dark' ? '☀️' : '🌓';
+
+            // Update logo colors
+            const logo = document.querySelector('.logo svg');
+            if (logo) {
+                const rect = logo.querySelector('rect');
+                const paths = logo.querySelectorAll('path');
+
+                if (theme === 'dark') {
+                    rect.setAttribute('fill', '#ffffff');
+                    paths.forEach(path => path.setAttribute('stroke', '#000000'));
+                } else {
+                    rect.setAttribute('fill', '#000000');
+                    paths.forEach(path => path.setAttribute('stroke', '#ffffff'));
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service | Stock Trading</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --background-color: #f5f5f7;
+            --text-color: #1d1d1f;
+            --card-background: #ffffff;
+            --border-color: #e5e7eb;
+            --secondary-text: #6b7280;
+            --button-background: #000000;
+            --button-text: #ffffff;
+            --button-hover: #333333;
+            --card-shadow: rgba(0, 0, 0, 0.05);
+            --accent-color: #0066cc;
+        }
+
+        [data-theme="dark"] {
+            --background-color: #1a1a1a;
+            --text-color: #ffffff;
+            --card-background: #2d2d2d;
+            --border-color: #404040;
+            --secondary-text: #a0a0a0;
+            --button-background: #ffffff;
+            --button-text: #000000;
+            --button-hover: #e5e5e5;
+            --card-shadow: rgba(0, 0, 0, 0.2);
+            --accent-color: #0a84ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 1rem;
+            padding-top: 4rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            margin: 1.5rem auto;
+        }
+
+        .logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo svg rect {
+            fill: var(--button-background);
+        }
+
+        .logo svg path {
+            stroke: var(--button-text);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--text-color);
+            letter-spacing: -0.02em;
+        }
+
+        .header-controls {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 0.75rem 1rem;
+            background: var(--background-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .back-btn, #themeToggle {
+            background: var(--button-background);
+            color: var(--button-text);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            height: 36px;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn:hover, #themeToggle:hover {
+            background: var(--button-hover);
+            transform: translateY(-1px);
+        }
+
+        .terms-card {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 4px 24px var(--card-shadow);
+            margin-bottom: 2rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .terms-section {
+            margin-bottom: 2rem;
+        }
+
+        .terms-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .section-content {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--secondary-text);
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+
+        .section-content ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .last-updated {
+            font-size: 0.875rem;
+            color: var(--secondary-text);
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .terms-card {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .terms-card {
+                padding: 1.25rem;
+            }
+
+            .section-title {
+                font-size: 1.125rem;
+            }
+
+            .section-content {
+                font-size: 0.9375rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-controls">
+        <div class="header-left">
+            <a href="/" class="back-btn">
+                ← Home
+            </a>
+        </div>
+        <div class="header-right">
+            <button id="themeToggle">🌓</button>
+        </div>
+    </div>
+
+    <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="24" height="24" rx="12" fill="#000"/>
+            <path d="M6 12.5L10 8.5L14 12.5L18 8.5" stroke="white" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+            <path d="M6 15.5L10 11.5L14 15.5L18 11.5" stroke="white" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+        </svg>
+    </div>
+
+    <div class="container">
+        <h1>Terms of Service</h1>
+
+        <div class="terms-card">
+            <div class="terms-section">
+                <h2 class="section-title">Introduction</h2>
+                <div class="section-content">
+                    <p>
+                        Welcome to our stock trading platform. These Terms of Service ("Terms") govern your use of our website, applications, and services. By accessing or using our platform, you agree to be bound by these Terms. If you disagree with any part of these Terms, you may not access our service.
+                    </p>
+                    <p>
+                        Please read these Terms carefully before using our platform. Your access to and use of the service is conditioned on your acceptance of and compliance with these Terms.
+                    </p>
+                </div>
+            </div>
+
+            <div class="terms-section">
+                <h2 class="section-title">Account Registration</h2>
+                <div class="section-content">
+                    <p>
+                        To use certain features of our platform, you must register for an account. When you register, you must provide accurate and complete information. You are solely responsible for maintaining the confidentiality of your account and password.
+                    </p>
+                    <p>
+                        You agree to accept responsibility for all activities that occur under your account. You must notify us immediately of any breach of security or unauthorized use of your account.
+                    </p>
+                    <p>
+                        We reserve the right to refuse service, terminate accounts, remove or edit content, or cancel orders at our sole discretion.
+                    </p>
+                </div>
+            </div>
+
+            <div class="terms-section">
+                <h2 class="section-title">Trading Services</h2>
+                <div class="section-content">
+                    <p>
+                        Our platform provides tools and information to assist in stock trading decisions. However, we do not provide personalized investment advice or recommendations. All trading decisions are made independently by you.
+                    </p>
+                    <p>
+                        Stock trading involves risk, and past performance is not indicative of future results. You should carefully consider your financial situation, investment objectives, level of experience, and risk appetite before making any investment decisions.
+                    </p>
+                    <p>
+                        Our stock price predictions and analyses are based on algorithms and historical data. These predictions are provided for informational purposes only and should not be considered as financial advice.
+                    </p>
+                </div>
+            </div>
+
+            <div class="terms-section">
+                <h2 class="section-title">Intellectual Property</h2>
+                <div class="section-content">
+                    <p>
+                        The service and its original content, features, and functionality are and will remain the exclusive property of our company and its licensors. The service is protected by copyright, trademark, and other laws of both the United States and foreign countries.
+                    </p>
+                    <p>
+                        Our trademarks and trade dress may not be used in connection with any product or service without our prior written consent.
+                    </p>
+                </div>
+            </div>
+
+            <div class="terms-section">
+                <h2 class="section-title">User Content</h2>
+                <div class="section-content">
+                    <p>
+                        Our platform may allow you to post, link, store, share, and otherwise make available certain information, text, graphics, or other material. By providing User Content to our platform, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, adapt, publish, translate, and distribute your content.
+                    </p>
+                    <p>
+                        You represent and warrant that:
+                    </p>
+                    <ul>
+                        <li>You own the content or have the right to use it and grant us the rights as provided in these Terms.</li>
+                        <li>The posting of your content does not violate the privacy rights, publicity rights, copyrights, contract rights, or any other rights of any person.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="terms-section">
+                <h2 class="section-title">Prohibited Activities</h2>
+                <div class="section-content">
+                    <p>
+                        You agree not to engage in any of the following prohibited activities:
+                    </p>
+                    <ul>
+                        <li>Using the service for any illegal purpose or in violation of any laws.</li>
+                        <li>Attempting to interfere with or compromise the system integrity or security of the platform.</li>
+                        <li>Engaging in automated use of the system, such as using scripts to add information or conduct trades.</li>
+                        <li>Attempting to impersonate another user or person.</li>
+                        <li>Using the service in a manner that could disable, overburden, damage, or impair the site.</li>
+                        <li>Using any information obtained from the service to harass, abuse, or harm another person.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="terms-section">
+                <h2 class="section-title">Limitation of Liability</h2>
+                <div class="section-content">
+                    <p>
+                        In no event shall we, our directors, employees, partners, agents, suppliers, or affiliates be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from:
+                    </p>
+                    <ul>
+                        <li>Your access to or use of or inability to access or use the service.</li>
+                        <li>Any conduct or content of any third party on the service.</li>
+                        <li>Any content obtained from the service.</li>
+                        <li>Unauthorized access, use, or alteration of your transmissions or content.</li>
+                        <li>Trading losses or decisions made based on information provided by our platform.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="terms-section">
+                <h2 class="section-title">Disclaimer</h2>
+                <div class="section-content">
+                    <p>
+                        Your use of the service is at your sole risk. The service is provided on an "AS IS" and "AS AVAILABLE" basis. The service is provided without warranties of any kind, whether express or implied, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, non-infringement, or course of performance.
+                    </p>
+                    <p>
+                        We do not warrant that the service will be uninterrupted, timely, secure, or error-free, or that any errors in the service will be corrected.
+                    </p>
+                </div>
+            </div>
+
+            <div class="terms-section">
+                <h2 class="section-title">Governing Law</h2>
+                <div class="section-content">
+                    <p>
+                        These Terms shall be governed and construed in accordance with the laws of the United States, without regard to its conflict of law provisions.
+                    </p>
+                    <p>
+                        Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights. If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions of these Terms will remain in effect.
+                    </p>
+                </div>
+            </div>
+
+            <div class="terms-section">
+                <h2 class="section-title">Changes to Terms</h2>
+                <div class="section-content">
+                    <p>
+                        We reserve the right, at our sole discretion, to modify or replace these Terms at any time. We will provide notice of any changes by posting the new Terms on this page and updating the "Last Updated" date.
+                    </p>
+                    <p>
+                        By continuing to access or use our service after those revisions become effective, you agree to be bound by the revised terms. If you do not agree to the new terms, you are no longer authorized to use the service.
+                    </p>
+                </div>
+            </div>
+
+            <p class="last-updated">Last Updated: March 15, 2025</p>
+        </div>
+    </div>
+
+    <script>
+        // Theme handling
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the theme toggle button
+            const themeToggle = document.getElementById('themeToggle');
+
+            // Initialize theme from localStorage or default to light
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+
+            // Add click event listener to theme toggle button
+            themeToggle.addEventListener('click', function () {
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                setTheme(newTheme);
+            });
+        });
+
+        function setTheme(theme) {
+            // Set theme on HTML element
+            document.documentElement.setAttribute('data-theme', theme);
+
+            // Save to localStorage
+            localStorage.setItem('theme', theme);
+
+            // Update button icon
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.innerHTML = theme === 'dark' ? '☀️' : '🌓';
+
+            // Update logo colors
+            const logo = document.querySelector('.logo svg');
+            if (logo) {
+                const rect = logo.querySelector('rect');
+                const paths = logo.querySelectorAll('path');
+
+                if (theme === 'dark') {
+                    rect.setAttribute('fill', '#ffffff');
+                    paths.forEach(path => path.setAttribute('stroke', '#000000'));
+                } else {
+                    rect.setAttribute('fill', '#000000');
+                    paths.forEach(path => path.setAttribute('stroke', '#ffffff'));
+                }
+            }
+        }
+    </script>
+</body>
+</html>

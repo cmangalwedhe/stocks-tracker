@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockVision - Contact Us</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --background-color: #f5f5f7;
+            --text-color: #1d1d1f;
+            --card-background: #ffffff;
+            --border-color: #e5e7eb;
+            --secondary-text: #6b7280;
+            --button-background: #000000;
+            --button-text: #ffffff;
+            --button-hover: #333333;
+            --card-shadow: rgba(0, 0, 0, 0.05);
+            --accent-color: #0066cc;
+        }
+
+        [data-theme="dark"] {
+            --background-color: #1a1a1a;
+            --text-color: #ffffff;
+            --card-background: #2d2d2d;
+            --border-color: #404040;
+            --secondary-text: #a0a0a0;
+            --button-background: #ffffff;
+            --button-text: #000000;
+            --button-hover: #e5e5e5;
+            --card-shadow: rgba(0, 0, 0, 0.2);
+            --accent-color: #0a84ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 1rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .logo {
+            width: 56px;
+            height: 56px;
+            margin: 4rem auto 2rem; /* Increased top margin to move logo down */
+        }
+
+        .logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--text-color);
+            letter-spacing: -0.02em;
+        }
+
+        .header-controls {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 0.75rem 1rem;
+            background: var(--background-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .back-btn, #themeToggle {
+            background: var(--button-background);
+            color: var(--button-text);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            height: 36px;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn:hover, #themeToggle:hover {
+            background: var(--button-hover);
+            transform: translateY(-1px);
+        }
+
+        .contact-card {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 4px 24px var(--card-shadow);
+            margin-bottom: 2rem;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.875rem 1.125rem;
+            border: 1px solid var(--border-color);
+            border-radius: 9999px;
+            font-size: 1rem;
+            background-color: var(--card-background);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        textarea.form-control {
+            border-radius: 16px;
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+        }
+
+        .submit-btn {
+            background-color: var(--button-background);
+            color: var(--button-text);
+            border: none;
+            padding: 0.875rem 1.125rem;
+            border-radius: 9999px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-1px);
+        }
+
+        .flash-message {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.875rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideDown 0.3s ease-out;
+            margin-bottom: 0.5rem;
+            width: calc(100% - 2rem);
+            max-width: 480px;
+        }
+
+        .flash-success {
+            background-color: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #86efac;
+        }
+
+        .flash-error {
+            background-color: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translate(-50%, -100%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive styles */
+        @media (max-width: 640px) {
+            .contact-card {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+
+            .logo {
+                margin: 3.5rem auto 1.5rem; /* Adjusted for mobile */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contact-card {
+                padding: 1.25rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-control {
+                font-size: 16px;
+                padding: 0.75rem 1rem;
+            }
+
+            .submit-btn {
+                padding: 0.75rem;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-controls">
+        <div class="header-left">
+            <a href="/" class="back-btn">
+                ← Home
+            </a>
+        </div>
+        <div class="header-right">
+            <button id="themeToggle">🌓</button>
+        </div>
+    </div>
+
+    <div id="flash-container"></div>
+
+    <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="24" height="24" rx="12" fill="#000000"/>
+            <path d="M6 12.5L10 8.5L14 12.5L18 8.5" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 15.5L10 11.5L14 15.5L18 11.5" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </div>
+
+    <div class="container">
+        <h1>Contact Us</h1>
+
+        <div class="contact-card">
+            <p class="text-center text-gray-600 mb-6">
+                Have a question or feedback? We'd love to hear from you.
+            </p>
+
+            <form id="contactForm" action="ef87fdb8cf0873f90c7f5e9fd1ac6937" method="POST">
+                <!-- FormSubmit configuration -->
+                <input type="hidden" name="_subject" value="New StockVision Contact Form Submission">
+                <input type="hidden" name="_next" value="/">
+
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="enquiry">Your Message</label>
+                    <textarea id="enquiry" name="enquiry" class="form-control" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Theme handling
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the theme toggle button
+            const themeToggle = document.getElementById('themeToggle');
+
+            // Initialize theme from localStorage or default to light
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+
+            // Add click event listener to theme toggle button
+            themeToggle.addEventListener('click', function () {
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                setTheme(newTheme);
+            });
+
+            // Form submission flash message
+            const contactForm = document.getElementById('contactForm');
+            contactForm.addEventListener('submit', function(event) {
+                // You can add additional validation here if needed
+                showFlashMessage('Form submitted');
+            });
+        });
+
+        function setTheme(theme) {
+            // Set theme on HTML element
+            document.documentElement.setAttribute('data-theme', theme);
+
+            // Save to localStorage
+            localStorage.setItem('theme', theme);
+
+            // Update button icon
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.innerHTML = theme === 'dark' ? '☀️' : '🌓';
+
+            // Update logo colors
+            const logo = document.querySelector('.logo svg');
+            if (logo) {
+                const rect = logo.querySelector('rect');
+                const paths = logo.querySelectorAll('path');
+
+                if (theme === 'dark') {
+                    rect.setAttribute('fill', '#ffffff');
+                    paths.forEach(path => path.setAttribute('stroke', '#000000'));
+                } else {
+                    rect.setAttribute('fill', '#000000');
+                    paths.forEach(path => path.setAttribute('stroke', '#ffffff'));
+                }
+            }
+        }
+
+        function showFlashMessage(message, type = 'success') {
+            const flashContainer = document.getElementById('flash-container');
+            const flashMessage = document.createElement('div');
+            flashMessage.className = `flash-message flash-${type}`;
+            flashMessage.innerHTML = `
+                ${message}
+                <button class="ml-auto" onclick="this.parentElement.remove()">×</button>
+            `;
+            flashContainer.appendChild(flashMessage);
+
+            setTimeout(() => {
+                if (flashMessage.parentElement) {
+                    flashMessage.remove();
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

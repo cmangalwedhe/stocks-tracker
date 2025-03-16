@@ -6,6 +6,7 @@ import time
 from functools import lru_cache
 from models import User
 import lstm_model
+from datetime import datetime as dt
 
 # Store stocks list in memory
 STOCKS = ['agx', 'alab', 'arm', 'asml', 'aspn', 'cava', 'crwd', 'deck', 'dell', 'dkng',
@@ -111,10 +112,28 @@ def prediction(ticker):
     plot = plot_and_predictions[0]
     predictions = plot_and_predictions[1]
 
-    return render_template("prediction.html", days=[i for i in range(1, len(predictions)+1)],
+    return render_template("prediction.html", ticker_symbol = ticker,
+                                                                current_date = dt.now(),
+                                                                days=[i for i in range(1, len(predictions)+1)],
                                                                 chart_image=plot,
                                                                 prediction=predictions)
 
+
+
+
+@main.route('/tos')
+def tos():
+    return render_template("tos.html")
+
+
+@main.route('/privacy-policy')
+def privacy_policy():
+    return render_template("privacy_policy.html")
+
+
+@main.route('/contact-us')
+def contact_us():
+    return render_template("contact_us.html")
 
 @main.route('/profile')
 @login_required
