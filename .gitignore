@@ -1,0 +1,3 @@
+.DS_Store
+/.venv
+website/secret_key.txt

@@ -8,12 +8,6 @@ from models import User
 import lstm_model
 from datetime import datetime as dt
 
-# Store stocks list in memory
-STOCKS = ['agx', 'alab', 'arm', 'asml', 'aspn', 'cava', 'crwd', 'deck', 'dell', 'dkng',
-          'duol', 'elf', 'estc', 'four', 'glbe', 'hims', 'hood', 'klac', 'mdb', 'meli',
-          'meta', 'mndy', 'mu', 'net', 'nu', 'onon', 'rbrk', 'rddt', 'rklb', 'rxrx',
-          'smcl', 'snow', 'tdw', 'tmdx', 'tsla', 'u', 'uber', 'vktx', 'zs']
-
 
 # Cache duration in seconds (e.g., 5 minutes)
 CACHE_DURATION = 300
@@ -25,7 +19,6 @@ def get_cached_timestamp():
 
 @lru_cache(maxsize=1)
 def get_all_stock_data(timestamp):
-    """Fetch all stock data in parallel with caching"""
     stocks = current_user.get_stock_symbols()
 
     def fetch_single_stock(symbol):

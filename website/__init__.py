@@ -4,7 +4,7 @@ from models import db, User
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'fjdklas;ladkfjsfkdla;slfkjasl;jkdf'
+app.config['SECRET_KEY'] = open("secret_text.txt", "r").read()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 
 db.init_app(app)
@@ -13,19 +13,18 @@ login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
 
-# First, initialize models with db
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Then register blueprints
-from auth import auth as auth_blueprint  # Remove the dot
+
+from auth import auth as auth_blueprint
 app.register_blueprint(auth_blueprint)
 
-from main import main as main_blueprint  # Remove the dot
+
+from main import main as main_blueprint
 app.register_blueprint(main_blueprint)
 
-# Create tables
 with app.app_context():
     db.create_all()
 
