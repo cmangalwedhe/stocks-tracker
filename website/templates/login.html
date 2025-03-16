@@ -22,6 +22,48 @@
             align-items: center;
             background-color: #f5f5f7;
             padding: 1rem;
+            padding-top: 4rem;
+        }
+
+        .header-controls {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 0.75rem 1rem;
+            background: #f5f5f7;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            height: 36px;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn:hover {
+            background: #333;
+            transform: translateY(-1px);
         }
 
         .logo {
@@ -240,6 +282,7 @@
             body {
                 padding: 0.75rem;
                 justify-content: center;
+                padding-top: 4rem;
             }
 
             .container {
@@ -300,6 +343,14 @@
     </style>
 </head>
 <body>
+    <div class="header-controls">
+        <div class="header-left">
+            <a href="/" class="back-btn">
+                ← Home
+            </a>
+        </div>
+    </div>
+
     <div id="flash-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
