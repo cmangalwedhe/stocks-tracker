@@ -102,8 +102,10 @@ def index():
 @main.route('/prediction/<ticker>')
 def prediction(ticker):
     plot_and_predictions = lstm_model.predict_stock_prices(ticker, days_to_predict=5)
-    plot = plot_and_predictions[0]
-    predictions = plot_and_predictions[1]
+    plot = plot_and_predictions[1]
+    predictions = plot_and_predictions[0]
+
+    print(predictions)
 
     return render_template("prediction.html", ticker_symbol = ticker,
                                                                 current_date = dt.now(),
