@@ -38,7 +38,7 @@ def get_all_stock_data(timestamp):
                 'oneYearTargetEstimate': price_target,
                 'url': f'https://finance.yahoo.com/quote/{symbol}/'
             }
-        except:
+        except Exception as e:
             return None
 
     # Use ThreadPoolExecutor to fetch data in parallel
@@ -135,6 +135,8 @@ def contact_us():
 def profile():
     timestamp = get_cached_timestamp()
     get_all_stock_data.cache_clear()
-
     stock_data = get_all_stock_data(timestamp)
+
+    print(stock_data)
+
     return render_template('index.html', stocks=stock_data)
